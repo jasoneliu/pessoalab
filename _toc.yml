@@ -7,3 +7,6 @@
 - header: IMDb Sentiment Analysis
 - file: imdb/imdb_rnn
 - file: imdb/imdb_lstm
+
+- header: Trajectory Divergence
+- file: traj_div/div
