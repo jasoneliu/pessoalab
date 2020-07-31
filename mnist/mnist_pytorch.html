@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>2. MNIST with PyTorch &#8212; Jason Liu</title>
+    <title>MNIST with PyTorch &#8212; Jason Liu</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
     <link href="../_static/css/index.css" rel="stylesheet">
     <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
@@ -39,8 +39,8 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="1. IMDb with Vanilla RNNs" href="../imdb/imdb_rnn.html" />
-    <link rel="prev" title="1. MNIST with Scikit-Learn" href="mnist_sklearn.html" />
+    <link rel="next" title="IMDb with Vanilla RNNs" href="../imdb/imdb_rnn.html" />
+    <link rel="prev" title="MNIST with Scikit-Learn" href="mnist_sklearn.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="docsearch:language" content="en">
@@ -81,12 +81,12 @@
 <ul class="current nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="mnist_sklearn.html">
-   1. MNIST with Scikit-Learn
+   MNIST with Scikit-Learn
   </a>
  </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   2. MNIST with PyTorch
+   MNIST with PyTorch
   </a>
  </li>
 </ul>
@@ -98,12 +98,12 @@
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../imdb/imdb_rnn.html">
-   1. IMDb with Vanilla RNNs
+   IMDb with Vanilla RNNs
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../imdb/imdb_lstm.html">
-   2. IMDb with LSTMs
+   IMDb with LSTMs
   </a>
  </li>
 </ul>
@@ -115,7 +115,7 @@
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../traj_div/div.html">
-   1. Trajectory Divergence
+   Trajectory Divergence
   </a>
  </li>
 </ul>
@@ -204,17 +204,17 @@
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#logistic-regression">
-   2.1. Logistic Regression
+   Logistic Regression
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#multilayer-perceptron">
-   2.2. Multilayer Perceptron
+   Multilayer Perceptron
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#convolutional-neural-network">
-   2.3. Convolutional Neural Network
+   Convolutional Neural Network
   </a>
  </li>
 </ul>
@@ -228,11 +228,11 @@
               <div>
                 
   <div class="section" id="mnist-with-pytorch">
-<h1><span class="section-number">2. </span>MNIST with PyTorch<a class="headerlink" href="#mnist-with-pytorch" title="Permalink to this headline">¶</a></h1>
+<h1>MNIST with PyTorch<a class="headerlink" href="#mnist-with-pytorch" title="Permalink to this headline">¶</a></h1>
 <p><strong>7/3/2020</strong></p>
 <p>PyTorch is another python machine learning library similar to scikit-learn. PyTorch is designed for deep learning, giving it more flexibility when creating neural networks.</p>
 <div class="section" id="logistic-regression">
-<h2><span class="section-number">2.1. </span>Logistic Regression<a class="headerlink" href="#logistic-regression" title="Permalink to this headline">¶</a></h2>
+<h2>Logistic Regression<a class="headerlink" href="#logistic-regression" title="Permalink to this headline">¶</a></h2>
 <p>Begin with imports:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -508,7 +508,7 @@ Test accuracy: 92.160%
 </div>
 </div>
 <div class="section" id="multilayer-perceptron">
-<h2><span class="section-number">2.2. </span>Multilayer Perceptron<a class="headerlink" href="#multilayer-perceptron" title="Permalink to this headline">¶</a></h2>
+<h2>Multilayer Perceptron<a class="headerlink" href="#multilayer-perceptron" title="Permalink to this headline">¶</a></h2>
 <p>We define a MLP with two hidden layers, one with 128 nodes and the other with 64 nodes. Similar to logistic regression, there are 784 input nodes and 10 output nodes:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -616,7 +616,7 @@ Test accuracy: 97.660%
 </div>
 </div>
 <div class="section" id="convolutional-neural-network">
-<h2><span class="section-number">2.3. </span>Convolutional Neural Network<a class="headerlink" href="#convolutional-neural-network" title="Permalink to this headline">¶</a></h2>
+<h2>Convolutional Neural Network<a class="headerlink" href="#convolutional-neural-network" title="Permalink to this headline">¶</a></h2>
 <p>We define a CNN with two convolution layers, each with 5x5 kernels. We have a max-pooling layer with stride 2 after each convolutional layer. Flattened tensors are then passed throung a dense layer and MLP:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -764,8 +764,8 @@ Test accuracy: 99.020%
     
     <div class='prev-next-bottom'>
         
-    <a class='left-prev' id="prev-link" href="mnist_sklearn.html" title="previous page"><span class="section-number">1. </span>MNIST with Scikit-Learn</a>
-    <a class='right-next' id="next-link" href="../imdb/imdb_rnn.html" title="next page"><span class="section-number">1. </span>IMDb with Vanilla RNNs</a>
+    <a class='left-prev' id="prev-link" href="mnist_sklearn.html" title="previous page">MNIST with Scikit-Learn</a>
+    <a class='right-next' id="next-link" href="../imdb/imdb_rnn.html" title="next page">IMDb with Vanilla RNNs</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">
