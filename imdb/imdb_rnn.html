@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>IMDb with Vanilla RNNs &#8212; Jason Liu</title>
+    <title>1. IMDb with Vanilla RNNs &#8212; Jason Liu</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
     <link href="../_static/css/index.css" rel="stylesheet">
     <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
@@ -13,6 +13,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
     <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/sphinx-book-theme.js"></script>
@@ -29,10 +30,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="IMDb with LSTMs" href="imdb_lstm.html" />
-    <link rel="prev" title="MNIST with PyTorch" href="../mnist/mnist_pytorch.html" />
+    <link rel="next" title="2. IMDb with LSTMs" href="imdb_lstm.html" />
+    <link rel="prev" title="2. MNIST with PyTorch" href="../mnist/mnist_pytorch.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="docsearch:language" content="en">
@@ -73,12 +81,12 @@
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../mnist/mnist_sklearn.html">
-   MNIST with Scikit-Learn
+   1. MNIST with Scikit-Learn
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../mnist/mnist_pytorch.html">
-   MNIST with PyTorch
+   2. MNIST with PyTorch
   </a>
  </li>
 </ul>
@@ -90,12 +98,12 @@
 <ul class="current nav sidenav_l1">
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   IMDb with Vanilla RNNs
+   1. IMDb with Vanilla RNNs
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="imdb_lstm.html">
-   IMDb with LSTMs
+   2. IMDb with LSTMs
   </a>
  </li>
 </ul>
@@ -107,7 +115,7 @@
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../traj_div/div.html">
-   Trajectory Divergence
+   1. Trajectory Divergence
   </a>
  </li>
 </ul>
@@ -196,17 +204,17 @@
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#imdb-movie-review-dataset-and-preprocessing">
-   IMDb Movie Review Dataset and Preprocessing
+   1.1. IMDb Movie Review Dataset and Preprocessing
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#recurrent-neural-network">
-   Recurrent Neural Network
+   1.2. Recurrent Neural Network
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#nested-cross-validation">
-   Nested Cross Validation
+   1.3. Nested Cross Validation
   </a>
  </li>
 </ul>
@@ -220,10 +228,10 @@
               <div>
                 
   <div class="section" id="imdb-with-vanilla-rnns">
-<h1>IMDb with Vanilla RNNs<a class="headerlink" href="#imdb-with-vanilla-rnns" title="Permalink to this headline">¶</a></h1>
+<h1><span class="section-number">1. </span>IMDb with Vanilla RNNs<a class="headerlink" href="#imdb-with-vanilla-rnns" title="Permalink to this headline">¶</a></h1>
 <p><strong>7/14/2020</strong></p>
 <div class="section" id="imdb-movie-review-dataset-and-preprocessing">
-<h2>IMDb Movie Review Dataset and Preprocessing<a class="headerlink" href="#imdb-movie-review-dataset-and-preprocessing" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.1. </span>IMDb Movie Review Dataset and Preprocessing<a class="headerlink" href="#imdb-movie-review-dataset-and-preprocessing" title="Permalink to this headline">¶</a></h2>
 <p>The IMDb Movie Review Dataset contains 50,000 reviews, split 50/50 into positive and negative reviews. The goal is to create a model that can accurately predict the sentiment (positive or negative) of a given review.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -359,7 +367,7 @@ Label: 1
 </div>
 </div>
 <div class="section" id="recurrent-neural-network">
-<h2>Recurrent Neural Network<a class="headerlink" href="#recurrent-neural-network" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.2. </span>Recurrent Neural Network<a class="headerlink" href="#recurrent-neural-network" title="Permalink to this headline">¶</a></h2>
 <p>We’re going to use a simple, vanilla RNN for classification. RNNs have a hidden state that is determined by the previous hidden state, thus creating recurrence. This allows it to have a “memory”.</p>
 <p>For classifying reviews, each time step inputs a single token formatted as a one-hot vector. The embedding layer converts this input to a dense embedding vector that no longer contains only 0 and 1. The RNN layer uses the embedding vector and previous hidden state to return an output and the current hidden state. The RNN output is passed to a fully connected linear output layer that allows for binary classification. The RNN model follows the tokens in sequential order, simulating how a human reads.</p>
 <p>To improve accuracy, padded sequences are packed so that the RNN doesn’t learn from the padding tokens. The sequences are then repacked to continue passing data through the model.
@@ -576,7 +584,7 @@ Test accuracy: 72.12%
 <p>72% accuracy is much better, but there’s still room to improve. Better models such as LSTMs can be used to achieve higher accuracy, which we will explore in the next section.</p>
 </div>
 <div class="section" id="nested-cross-validation">
-<h2>Nested Cross Validation<a class="headerlink" href="#nested-cross-validation" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.3. </span>Nested Cross Validation<a class="headerlink" href="#nested-cross-validation" title="Permalink to this headline">¶</a></h2>
 <p>Using a test/val/train split is already quite effective. However, it only creates one split that can possibly create unbalanced datasets due to a random split. Consequently, a single test accuracy may not be fully representative of the model’s true accuracy.</p>
 <p>Nested cross validation is a solution to this problem. Instead of splitting the dataset once, k-fold CV splits the dataset into k equal parts known as folds. In the outer CV, one of these folds are used as a test set, while the other k-1 folds are used as a trainval set. Then in the inner CV, the trainval set is similarly split into k folds, one of which is used as a validation set while the rest are used as a training set. In the outer and inner CVs, all k folds are used as a training and validation set, respectively.</p>
 <p>In essence, the roles of each set remain the same, but apply to multiple folds instead of one. The validation set is used for hyperparameter optimization. In this case, optimization is done using a grid search, which finds the lowest mean loss across all k inner folds. Similarly, the test set is used to find the mean test loss and accuracy across all k outer folds.</p>
@@ -818,6 +826,25 @@ Training time: 2544.277s
 </div>
 </div>
 
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./imdb"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
 
               </div>
               
@@ -827,8 +854,8 @@ Training time: 2544.277s
     
     <div class='prev-next-bottom'>
         
-    <a class='left-prev' id="prev-link" href="../mnist/mnist_pytorch.html" title="previous page">MNIST with PyTorch</a>
-    <a class='right-next' id="next-link" href="imdb_lstm.html" title="next page">IMDb with LSTMs</a>
+    <a class='left-prev' id="prev-link" href="../mnist/mnist_pytorch.html" title="previous page"><span class="section-number">2. </span>MNIST with PyTorch</a>
+    <a class='right-next' id="next-link" href="imdb_lstm.html" title="next page"><span class="section-number">2. </span>IMDb with LSTMs</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">

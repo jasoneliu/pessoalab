@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>IMDb with LSTMs &#8212; Jason Liu</title>
+    <title>2. IMDb with LSTMs &#8212; Jason Liu</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
     <link href="../_static/css/index.css" rel="stylesheet">
     <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
@@ -13,6 +13,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
     <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/sphinx-book-theme.js"></script>
@@ -29,10 +30,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Trajectory Divergence" href="../traj_div/div.html" />
-    <link rel="prev" title="IMDb with Vanilla RNNs" href="imdb_rnn.html" />
+    <link rel="next" title="1. Trajectory Divergence" href="../traj_div/div.html" />
+    <link rel="prev" title="1. IMDb with Vanilla RNNs" href="imdb_rnn.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="docsearch:language" content="en">
@@ -73,12 +81,12 @@
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../mnist/mnist_sklearn.html">
-   MNIST with Scikit-Learn
+   1. MNIST with Scikit-Learn
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../mnist/mnist_pytorch.html">
-   MNIST with PyTorch
+   2. MNIST with PyTorch
   </a>
  </li>
 </ul>
@@ -90,12 +98,12 @@
 <ul class="current nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="imdb_rnn.html">
-   IMDb with Vanilla RNNs
+   1. IMDb with Vanilla RNNs
   </a>
  </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   IMDb with LSTMs
+   2. IMDb with LSTMs
   </a>
  </li>
 </ul>
@@ -107,7 +115,7 @@
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../traj_div/div.html">
-   Trajectory Divergence
+   1. Trajectory Divergence
   </a>
  </li>
 </ul>
@@ -196,12 +204,12 @@
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#preprocessing-dataset">
-   Preprocessing Dataset
+   2.1. Preprocessing Dataset
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#long-short-term-memory">
-   Long Short-Term Memory
+   2.2. Long Short-Term Memory
   </a>
  </li>
 </ul>
@@ -215,11 +223,11 @@
               <div>
                 
   <div class="section" id="imdb-with-lstms">
-<h1>IMDb with LSTMs<a class="headerlink" href="#imdb-with-lstms" title="Permalink to this headline">¶</a></h1>
+<h1><span class="section-number">2. </span>IMDb with LSTMs<a class="headerlink" href="#imdb-with-lstms" title="Permalink to this headline">¶</a></h1>
 <p><strong>7/17/2020</strong></p>
 <p>Let’s create a model that improves on the previous vanilla RNN.</p>
 <div class="section" id="preprocessing-dataset">
-<h2>Preprocessing Dataset<a class="headerlink" href="#preprocessing-dataset" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">2.1. </span>Preprocessing Dataset<a class="headerlink" href="#preprocessing-dataset" title="Permalink to this headline">¶</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
@@ -292,7 +300,7 @@ Test set size:       10000
 </div>
 </div>
 <div class="section" id="long-short-term-memory">
-<h2>Long Short-Term Memory<a class="headerlink" href="#long-short-term-memory" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">2.2. </span>Long Short-Term Memory<a class="headerlink" href="#long-short-term-memory" title="Permalink to this headline">¶</a></h2>
 <p>A LSTM is a RNN architecture that has a hidden state, similar to the previous vanilla RNN. However, a LSTM unit has a different structure composed of a cell, an input gate, an output gate and a forget gate. This structure allows the cell to learn and remember dependencies over longer periods than a vanilla RNN. The three gates also regulate the flow of information into and out of the cell to create a more complex memory system that creates both long and short term memory.</p>
 <p>The model we use for reviews will remain the same as before, with an input, embedding, RNN, and fully connected linear output layer. The only difference is that the vanilla RNN layer is replaced with a LSTM layer. Using a LSTM alters the forward function slightly since there is now a cell along with the hidden state.</p>
 <p>We can improve the LSTM by adding multiple layers. Tokens are fed into the bottom layer. The output is then sent to the cell in the layer above at the same time step. All layers still use the hidden state from the previous time step in the same layer.</p>
@@ -524,6 +532,25 @@ Test accuracy: 85.48%
 </div>
 </div>
 
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./imdb"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
 
               </div>
               
@@ -533,8 +560,8 @@ Test accuracy: 85.48%
     
     <div class='prev-next-bottom'>
         
-    <a class='left-prev' id="prev-link" href="imdb_rnn.html" title="previous page">IMDb with Vanilla RNNs</a>
-    <a class='right-next' id="next-link" href="../traj_div/div.html" title="next page">Trajectory Divergence</a>
+    <a class='left-prev' id="prev-link" href="imdb_rnn.html" title="previous page"><span class="section-number">1. </span>IMDb with Vanilla RNNs</a>
+    <a class='right-next' id="next-link" href="../traj_div/div.html" title="next page"><span class="section-number">1. </span>Trajectory Divergence</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">

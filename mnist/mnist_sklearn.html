@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>MNIST with Scikit-Learn &#8212; Jason Liu</title>
+    <title>1. MNIST with Scikit-Learn &#8212; Jason Liu</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
     <link href="../_static/css/index.css" rel="stylesheet">
     <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
@@ -13,6 +13,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
     <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/sphinx-book-theme.js"></script>
@@ -29,9 +30,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="MNIST with PyTorch" href="mnist_pytorch.html" />
+    <link rel="next" title="2. MNIST with PyTorch" href="mnist_pytorch.html" />
     <link rel="prev" title="About Me" href="../intro.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -73,12 +81,12 @@
 <ul class="current nav sidenav_l1">
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   MNIST with Scikit-Learn
+   1. MNIST with Scikit-Learn
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="mnist_pytorch.html">
-   MNIST with PyTorch
+   2. MNIST with PyTorch
   </a>
  </li>
 </ul>
@@ -90,12 +98,12 @@
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../imdb/imdb_rnn.html">
-   IMDb with Vanilla RNNs
+   1. IMDb with Vanilla RNNs
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../imdb/imdb_lstm.html">
-   IMDb with LSTMs
+   2. IMDb with LSTMs
   </a>
  </li>
 </ul>
@@ -107,7 +115,7 @@
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../traj_div/div.html">
-   Trajectory Divergence
+   1. Trajectory Divergence
   </a>
  </li>
 </ul>
@@ -196,95 +204,95 @@
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#mnist-dataset">
-   MNIST Dataset
+   1.1. MNIST Dataset
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#logistic-regression">
-   Logistic Regression
+   1.2. Logistic Regression
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#support-vector-machines">
-   Support Vector Machines
+   1.3. Support Vector Machines
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#linear-kernel">
-     Linear Kernel
+     1.3.1. Linear Kernel
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#polynomial-kernel">
-     Polynomial Kernel
+     1.3.2. Polynomial Kernel
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#rbf-kernel">
-     RBF Kernel
+     1.3.3. RBF Kernel
     </a>
    </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#naive-bayes-classifiers">
-   Naive Bayes Classifiers
+   1.4. Naive Bayes Classifiers
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#gaussian-naive-bayes">
-     Gaussian Naive Bayes
+     1.4.1. Gaussian Naive Bayes
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#multinomial-naive-bayes">
-     Multinomial Naive Bayes
+     1.4.2. Multinomial Naive Bayes
     </a>
    </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#analysis-which-classifier-to-use">
-   Analysis: Which Classifier to Use
+   1.5. Analysis: Which Classifier to Use
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#other-classifiers">
-   Other Classifiers
+   1.6. Other Classifiers
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#ensemble-methods">
-     Ensemble Methods
+     1.6.1. Ensemble Methods
     </a>
     <ul class="nav section-nav flex-column">
      <li class="toc-h4 nav-item toc-entry">
       <a class="reference internal nav-link" href="#random-forest-classifier">
-       Random Forest Classifier
+       1.6.1.1. Random Forest Classifier
       </a>
      </li>
      <li class="toc-h4 nav-item toc-entry">
       <a class="reference internal nav-link" href="#gradient-boosting-classifier">
-       Gradient Boosting Classifier
+       1.6.1.2. Gradient Boosting Classifier
       </a>
      </li>
     </ul>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#neural-networks">
-     Neural Networks
+     1.6.2. Neural Networks
     </a>
     <ul class="nav section-nav flex-column">
      <li class="toc-h4 nav-item toc-entry">
       <a class="reference internal nav-link" href="#multi-layer-perceptron">
-       Multi-layer Perceptron
+       1.6.2.1. Multi-layer Perceptron
       </a>
      </li>
     </ul>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#comparison-with-logistic-regression-svms-and-naive-bayes">
-     Comparison With Logistic Regression, SVMs, and Naive Bayes
+     1.6.3. Comparison With Logistic Regression, SVMs, and Naive Bayes
     </a>
    </li>
   </ul>
@@ -300,11 +308,11 @@
               <div>
                 
   <div class="section" id="mnist-with-scikit-learn">
-<h1>MNIST with Scikit-Learn<a class="headerlink" href="#mnist-with-scikit-learn" title="Permalink to this headline">¶</a></h1>
+<h1><span class="section-number">1. </span>MNIST with Scikit-Learn<a class="headerlink" href="#mnist-with-scikit-learn" title="Permalink to this headline">¶</a></h1>
 <p><strong>6/30/2020</strong></p>
 <p>In classification problems, a variety of supervised learning techniques can be effectively used. In this report, we evaluate the advantages and drawbacks of three common classifiers using the MNIST dataset and scikit-learn, a python machine learning library. In doing so, we hope to answer the question of <strong>“When to use Logistic Regression vs Support Vector Machines vs Naive Bayes classifiers”</strong></p>
 <div class="section" id="mnist-dataset">
-<h2>MNIST Dataset<a class="headerlink" href="#mnist-dataset" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.1. </span>MNIST Dataset<a class="headerlink" href="#mnist-dataset" title="Permalink to this headline">¶</a></h2>
 <p>The MNIST dataset is a collection of 70,000 28x28 pixel grayscale images of handwritten digits (0-9), with each pixel corresponding to an integer between 0 (black) and 255 (white).</p>
 <p>The goal is to create a model that can accurately predict the digit contained in given image. For this classification task, each pixel will be a feature. Feature scaling is used to constrain features between 0.0 and 1.0. Since the digits are distributed fairly evenly, accuracy can be used to evaluate the model rather than precision, recall, or F1 score.</p>
 <p>We can create two datasets of different sizes: one full-sized dataset (70,000 images) and one 10%-sized dataset (7,000 images)<br />
@@ -364,7 +372,7 @@ Each dataset is then split into sets:</p>
 </div>
 </div>
 <div class="section" id="logistic-regression">
-<h2>Logistic Regression<a class="headerlink" href="#logistic-regression" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.2. </span>Logistic Regression<a class="headerlink" href="#logistic-regression" title="Permalink to this headline">¶</a></h2>
 <p>Logistic regression is a discriminative model, meaning that it learns the decision boundary between classes. In binary classification, this involves a hypothesis <span class="math notranslate nohighlight">\(h_\theta(x)=\frac{1}{1+e^{\theta^Tx}}\)</span> representing the probability <span class="math notranslate nohighlight">\(P(y|x)\)</span> that a given data point with features x belongs to class y. The logistic function allows for the probabilistic representation since it restricts y to values between 0 and 1.</p>
 <p>Classification is determined based on the greater probability between <span class="math notranslate nohighlight">\(P(y=0|x)\)</span> and <span class="math notranslate nohighlight">\(P(y=1|x)\)</span>. The decision boundary is created at an equal probability of both classes, which occurs at <span class="math notranslate nohighlight">\(h_\theta(x)=0.5\)</span> or <span class="math notranslate nohighlight">\(\theta^Tx=0\)</span>. Though typically linear, this decision boundary can become non-linear by creating new features that are polynomial terms of previous features.</p>
 <p>A cost function <span class="math notranslate nohighlight">\(J(\theta)\)</span> is defined to measure the error in the model’s classification accuracy across all training examples. The model minimizes <span class="math notranslate nohighlight">\(J(\theta)\)</span> using an optimization algorithm such as gradient descent or L-BFGS in order to find the <span class="math notranslate nohighlight">\(\theta\)</span> that results in the lowest cost or greatest classification accuracy. Regularization is applied to address overfitting. An extra term called a penalty is added to <span class="math notranslate nohighlight">\(J(\theta)\)</span>, though it also introduces a hyperparameter <span class="math notranslate nohighlight">\(C\)</span> that needs to be optimized as well.</p>
@@ -472,12 +480,12 @@ Small dataset:
 </div>
 </div>
 <div class="section" id="support-vector-machines">
-<h2>Support Vector Machines<a class="headerlink" href="#support-vector-machines" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.3. </span>Support Vector Machines<a class="headerlink" href="#support-vector-machines" title="Permalink to this headline">¶</a></h2>
 <p>A SVM is another discriminative model similar to logistic regression in the sense that they have a similar cost function, with the softmax function being approximated with a linear rectifier. The cost function (with regularization) is also minimized to maximize classification accuracy and the one-vs-rest method is used for multiclass classification.</p>
 <p>A key difference is that SVMs are capable of large margin classification, meaning that they maximize the distance between the data and the decision boundary, which is also called a hyperplane. The hyperplane is defined by support vectors, which are created from points in each class closest to the decision boundary.</p>
 <p>Kernels allow SVMs to perform nonlinear classification by defining new features based on similarity with chosen landmarks, then training based on the same cost function. The similarity function is defined by the kernel, which often adds more hyperparaters such as <span class="math notranslate nohighlight">\(\gamma\)</span> in the Gaussian/RBF kernel. When no kernel is used, the model is often referred to as using a linear kernel.</p>
 <div class="section" id="linear-kernel">
-<h3>Linear Kernel<a class="headerlink" href="#linear-kernel" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">1.3.1. </span>Linear Kernel<a class="headerlink" href="#linear-kernel" title="Permalink to this headline">¶</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">svm_lin</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="s1">&#39;scale&#39;</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">decision_function_shape</span><span class="o">=</span><span class="s1">&#39;ovr&#39;</span><span class="p">)</span>
@@ -502,7 +510,7 @@ Small dataset:
 </div>
 </div>
 <div class="section" id="polynomial-kernel">
-<h3>Polynomial Kernel<a class="headerlink" href="#polynomial-kernel" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">1.3.2. </span>Polynomial Kernel<a class="headerlink" href="#polynomial-kernel" title="Permalink to this headline">¶</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">clf</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;poly&#39;</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">decision_function_shape</span><span class="o">=</span><span class="s1">&#39;ovr&#39;</span><span class="p">)</span>
@@ -542,7 +550,7 @@ Small dataset:
 </div>
 </div>
 <div class="section" id="rbf-kernel">
-<h3>RBF Kernel<a class="headerlink" href="#rbf-kernel" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">1.3.3. </span>RBF Kernel<a class="headerlink" href="#rbf-kernel" title="Permalink to this headline">¶</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">clf</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;rbf&#39;</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">decision_function_shape</span><span class="o">=</span><span class="s1">&#39;ovr&#39;</span><span class="p">)</span>
@@ -595,12 +603,12 @@ Small dataset:
 </div>
 </div>
 <div class="section" id="naive-bayes-classifiers">
-<h2>Naive Bayes Classifiers<a class="headerlink" href="#naive-bayes-classifiers" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.4. </span>Naive Bayes Classifiers<a class="headerlink" href="#naive-bayes-classifiers" title="Permalink to this headline">¶</a></h2>
 <p>The Naive Bayes classifier is a generative model, meaning that it models the distribution of individual classes rather than learning a decision boundary. Naive Bayes is based on Bayes’ Theorem: <span class="math notranslate nohighlight">\(P(y|x) = \frac{P(y)P(x|y)}{P(x)}\)</span></p>
 <p>We can calculate <span class="math notranslate nohighlight">\(P(y|x)\)</span> if we make the naive assumption that the features <span class="math notranslate nohighlight">\(x_i\)</span> are independent of each other, which very rarely occurs but often works sufficiently in practice. Assuming independence, <span class="math notranslate nohighlight">\(P(y|x) = \frac{P(y)\Pi_{i=1}^nP(x_i|y)}{\Pi_{i=1}^nP(x_i)}\)</span>. The Naive Bayes classifier then predicts the class <span class="math notranslate nohighlight">\(y\)</span> with the highest <span class="math notranslate nohighlight">\(P(y|x)\)</span>.</p>
 <p>Because the MNIST data contains discrete data (integers), we will use the multinomial Naive Bayes classifier, where class and conditional probabilities are calculated from the training set.</p>
 <div class="section" id="gaussian-naive-bayes">
-<h3>Gaussian Naive Bayes<a class="headerlink" href="#gaussian-naive-bayes" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">1.4.1. </span>Gaussian Naive Bayes<a class="headerlink" href="#gaussian-naive-bayes" title="Permalink to this headline">¶</a></h3>
 <p>The Gaussian Naive Bayes classifier models continuous-valued features. The MNIST data is technically discrete, but is only forced to be so due to limitations of image representation. In practice, values are essentially continuous.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -626,7 +634,7 @@ Small dataset:
 </div>
 </div>
 <div class="section" id="multinomial-naive-bayes">
-<h3>Multinomial Naive Bayes<a class="headerlink" href="#multinomial-naive-bayes" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">1.4.2. </span>Multinomial Naive Bayes<a class="headerlink" href="#multinomial-naive-bayes" title="Permalink to this headline">¶</a></h3>
 <p>The Multinomial Naive Bayes classifier models discrete-valued features.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -653,7 +661,7 @@ Small dataset:
 </div>
 </div>
 <div class="section" id="analysis-which-classifier-to-use">
-<h2>Analysis: Which Classifier to Use<a class="headerlink" href="#analysis-which-classifier-to-use" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.5. </span>Analysis: Which Classifier to Use<a class="headerlink" href="#analysis-which-classifier-to-use" title="Permalink to this headline">¶</a></h2>
 <p>Classification accuracy is one of the most important factors in determining a good model. The least accurate model was the SVM with linear kernel. With a low accuracy of 70%, this result suggests that the data is not effectively linearly separable. Therefore, it would be more effective to use a model that can better deal with nonlinear classification. This result is confirmed with logistic regression and SVM with RBF kernel both attaining 91% accuracy, though SVM has the capability to perform better with more epochs and optimized hyperparameters. The Naive Bayes classifier performed at an intermediate level with an accuracy of 82%. It likely did not perform as well due to the naive assumption not being sufficiently effective, which makes sense because pixels in a digit are certainly dependent on their surrounding pixels.</p>
 <p>Computation time is also valuable. The Naive Bayes classifier was extremely quick to train even with large datasets since it only needs to go through the data once to calculate probabilities. In comparison, logistic regression is much slower, but still reasonably quick to train with a large dataset. SVM is the slowest by far, which becomes especially evident with larger datasets. This occurs because training computation increases quadratically with the number of samples for SVMs.</p>
 <p>Hyperparameters contribute to computation since they need to be optimized to attain a greater accuracy. Naive Bayes lacks hyperparameters, making it very easy to implement and run. Logistic regression only uses one hyperparameter <span class="math notranslate nohighlight">\(C\)</span>, which is fairly manageable. SVMs with a polynomial or RBF kernel need to optimize both <span class="math notranslate nohighlight">\(C\)</span> and <span class="math notranslate nohighlight">\(\gamma\)</span>, which takes much longer. In this report, I had to restrict <span class="math notranslate nohighlight">\(\gamma\)</span> to a default value to make it reasonably quick. For SVMs, there is also a choice between many different kernels.</p>
@@ -661,12 +669,12 @@ Small dataset:
 <p>In general, it’s a good idea to try different models as they all have benefits for different types of problems. I would recommend always trying Naive Bayes first since it’s just so quick and simple. There’s a good chance the model (and the naive assumption) will perform surprisingly accurately with minimal overfitting, though typically not as well as other trained and tuned models. It may also be worth a shot to try a SVM with linear kernel to see if the data is linearly separable, which allows for simpler calculations and visualization. In the case that both don’t work, logistic regression and SVMs should be evauluated. Both models have a flexible decision boundary, which especially pertains to the different kernels a SVM can use. The trade-off is between computation and accuracy: SVMs are typically more accurate since they use large-margin classification, but they are much more memory intensive than logistic regression due to tuning and training.</p>
 </div>
 <div class="section" id="other-classifiers">
-<h2>Other Classifiers<a class="headerlink" href="#other-classifiers" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.6. </span>Other Classifiers<a class="headerlink" href="#other-classifiers" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="ensemble-methods">
-<h3>Ensemble Methods<a class="headerlink" href="#ensemble-methods" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">1.6.1. </span>Ensemble Methods<a class="headerlink" href="#ensemble-methods" title="Permalink to this headline">¶</a></h3>
 <p>Ensemble methods combine multiple weaker models into a singal model more optimal for classification.</p>
 <div class="section" id="random-forest-classifier">
-<h4>Random Forest Classifier<a class="headerlink" href="#random-forest-classifier" title="Permalink to this headline">¶</a></h4>
+<h4><span class="section-number">1.6.1.1. </span>Random Forest Classifier<a class="headerlink" href="#random-forest-classifier" title="Permalink to this headline">¶</a></h4>
 <p>Random forest is based on decision trees, a model that separates classes using decisions in a tree-like organization, where each decision splits a node into multiple paths. Each decision is based on a feature and is chosen in order of features that create the most separation.</p>
 <p>Random forest classifiers use multiple decision trees that are relatively uncorrelated, hence creating an ensemble. Each decision tree gives a prediction and the random forest picks the majority vote. Low correlation allows for trees to protect each other from invidual error. This is accomplished by providing each decision tree with a random subset of features rather than all features.</p>
 <div class="cell docutils container">
@@ -693,7 +701,7 @@ Small dataset:
 </div>
 </div>
 <div class="section" id="gradient-boosting-classifier">
-<h4>Gradient Boosting Classifier<a class="headerlink" href="#gradient-boosting-classifier" title="Permalink to this headline">¶</a></h4>
+<h4><span class="section-number">1.6.1.2. </span>Gradient Boosting Classifier<a class="headerlink" href="#gradient-boosting-classifier" title="Permalink to this headline">¶</a></h4>
 <p>Gradient boosting classifier are similar to random forest classifiers in the sense that they use a majority vote from an ensemble of decision trees.</p>
 <p>It differs because decision trees are added one at a time, minimizing a cost function in the process.</p>
 <div class="cell docutils container">
@@ -721,11 +729,11 @@ Small dataset:
 </div>
 </div>
 <div class="section" id="neural-networks">
-<h3>Neural Networks<a class="headerlink" href="#neural-networks" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">1.6.2. </span>Neural Networks<a class="headerlink" href="#neural-networks" title="Permalink to this headline">¶</a></h3>
 <p>Neural networks are structures of nodes in layers, where weighted connections form between nodes in different layers. These weights and node activations in one layer define the activations of nodes in the next layer in a process called forward propagation.</p>
 <p>NNs behave similarly to logistic regression as ativations can use the logistic activation function, though other activation functions can be used as well. They also have the same cost function that can be minimized with an optimization method such as gradient descent or L-BFGS. Due to the NN structure, the gradient is computed through back propagation.</p>
 <div class="section" id="multi-layer-perceptron">
-<h4>Multi-layer Perceptron<a class="headerlink" href="#multi-layer-perceptron" title="Permalink to this headline">¶</a></h4>
+<h4><span class="section-number">1.6.2.1. </span>Multi-layer Perceptron<a class="headerlink" href="#multi-layer-perceptron" title="Permalink to this headline">¶</a></h4>
 <p>A MLP is a neural networks that is organized as an input layer, hidden layers, and an output layer, with each node being connected to all nodes in the next layer. It does not have any other complex structure that other neural networks may have.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -763,7 +771,7 @@ Small dataset:
 </div>
 </div>
 <div class="section" id="comparison-with-logistic-regression-svms-and-naive-bayes">
-<h3>Comparison With Logistic Regression, SVMs, and Naive Bayes<a class="headerlink" href="#comparison-with-logistic-regression-svms-and-naive-bayes" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">1.6.3. </span>Comparison With Logistic Regression, SVMs, and Naive Bayes<a class="headerlink" href="#comparison-with-logistic-regression-svms-and-naive-bayes" title="Permalink to this headline">¶</a></h3>
 <p>All three models had much higher classification accuracies than previous models, though this lead to slower training for the gradient boosting classifier and MLP. The random forest classifier stood out as a model with  high accuracy while still maintaining a reasonable training speed that was quicker than SVMs.</p>
 <p>The models also all have hyperparameters that require time to tune. However, they already work very well with no tuning, which suggest that a tuned model would be even more accurate. There was some overfitting with both dataset sizes, though this may have been caused by improper tuning.</p>
 <p>Ultimately, the decision once again comes down to accuracy vs computation, though different classifiers may work better with other types of problems so it is beneficial to try multiple models.</p>
@@ -771,6 +779,25 @@ Small dataset:
 </div>
 </div>
 
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./mnist"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
 
               </div>
               
@@ -781,7 +808,7 @@ Small dataset:
     <div class='prev-next-bottom'>
         
     <a class='left-prev' id="prev-link" href="../intro.html" title="previous page">About Me</a>
-    <a class='right-next' id="next-link" href="mnist_pytorch.html" title="next page">MNIST with PyTorch</a>
+    <a class='right-next' id="next-link" href="mnist_pytorch.html" title="next page"><span class="section-number">2. </span>MNIST with PyTorch</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">
