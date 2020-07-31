@@ -1,19 +1,15 @@
 - file: intro
-  numbered: true
 
 - chapter: MNIST Digit Classification
-  numbered: true
   sections:
   - file: mnist/mnist_sklearn
   - file: mnist/mnist_pytorch
 
 - chapter: IMDb Sentiment Analysis
-  numbered: true
   sections:
   - file: imdb/imdb_rnn
   - file: imdb/imdb_lstm
 
 - chapter: Trajectory Divergence
-  numbered: true
   sections:
   - file: traj_div/div
