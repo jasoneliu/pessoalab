@@ -21,7 +21,7 @@ html:
 #######################################################################################
 # Launch button settings
 repository:
-  url: https://github.com/jasoneliu/pessoalab
+  url: https://github.com/jasoneliu/pessoalab2020
 latex:
   latex_engine: "xelatex"
   latex_documents:
