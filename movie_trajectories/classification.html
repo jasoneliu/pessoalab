@@ -1,0 +1,433 @@
+
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Classification with Spline Coefficients &#8212; Jason Liu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
+    <link href="../_static/css/index.css" rel="stylesheet">
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/sphinx-book-theme.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/mystnb.js"></script>
+    <script src="../_static/sphinx-book-theme.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Trajectory Properties" href="trajectories.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="docsearch:language" content="en">
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  <img src="../_static/logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Jason Liu</h1>
+  
+</a>
+</div>
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <p class="caption">
+ <span class="caption-text">
+  MNIST Digit Classification
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../mnist/mnist_sklearn.html">
+   MNIST with Scikit-Learn
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../mnist/mnist_pytorch.html">
+   MNIST with PyTorch
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  IMDb Sentiment Analysis
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../imdb/imdb_rnn.html">
+   IMDb with Vanilla RNNs
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../imdb/imdb_lstm.html">
+   IMDb with LSTMs
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Movie-Watching Trajectories
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="trajectories.html">
+   Trajectory Properties
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Classification with Spline Coefficients
+  </a>
+ </li>
+</ul>
+
+</nav>
+
+ <!-- To handle the deprecated key -->
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        <div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/movie_trajectories/classification.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+    
+</div>
+        <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/jasoneliu/pessoalab2020"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/jasoneliu/pessoalab2020/issues/new?title=Issue%20on%20page%20%2Fmovie_trajectories/classification.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        <a class="edit-button" href="https://github.com/jasoneliu/pessoalab2020/edit/master/movie_trajectories/classification.ipynb"><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
+    </div>
+</div>
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            
+        </nav>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="classification-with-spline-coefficients">
+<h1>Classification with Spline Coefficients<a class="headerlink" href="#classification-with-spline-coefficients" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Last updated 11 PM, 8/13/2020</p>
+</div>
+<div class="cell tag_hide-input tag_remove-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">sqrt</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">pickle</span> <span class="k">as</span> <span class="nn">pkl</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
+<span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
+<span class="kn">from</span> <span class="nn">plotly.subplots</span> <span class="kn">import</span> <span class="n">make_subplots</span>
+<span class="kn">import</span> <span class="nn">plotly.offline</span> <span class="k">as</span> <span class="nn">pyo</span>
+<span class="n">pyo</span><span class="o">.</span><span class="n">init_notebook_mode</span><span class="p">()</span>
+
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span>
+<span class="kn">from</span> <span class="nn">ipythonblocks</span> <span class="kn">import</span> <span class="n">BlockGrid</span>
+<span class="kn">from</span> <span class="nn">webcolors</span> <span class="kn">import</span> <span class="n">name_to_rgb</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">interpolate</span>
+<span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">lambdify</span><span class="p">,</span> <span class="n">bspline_basis_set</span><span class="p">,</span> <span class="n">symbols</span>
+<span class="kn">import</span> <span class="nn">textwrap</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;trajectories_updated.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pkl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="n">traj_df</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;traj_df&#39;</span><span class="p">]</span>
+<span class="n">mean_df</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;mean_df&#39;</span><span class="p">]</span>
+<span class="n">clipdata_df</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;clipdata_df&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># find basis functions</span>
+<span class="n">clips</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;oceans&#39;</span><span class="p">,</span><span class="s1">&#39;overcome&#39;</span><span class="p">]</span>
+<span class="n">pids</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+
+<span class="n">bases</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">clips</span><span class="p">),</span><span class="nb">len</span><span class="p">(</span><span class="n">pids</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;object&#39;</span><span class="p">)</span>
+<span class="n">info</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">clips</span><span class="p">),</span><span class="nb">len</span><span class="p">(</span><span class="n">pids</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;object&#39;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">clip</span><span class="p">,</span> <span class="n">clip_name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">clips</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">pid_i</span><span class="p">,</span> <span class="n">pid</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pids</span><span class="p">):</span>
+        <span class="n">temp_df</span> <span class="o">=</span> <span class="n">traj_df</span><span class="p">[(</span><span class="n">traj_df</span><span class="o">.</span><span class="n">clip_name</span><span class="o">==</span><span class="n">clip_name</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">traj_df</span><span class="o">.</span><span class="n">pid</span><span class="o">==</span><span class="n">pid</span><span class="p">)]</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">temp_df</span><span class="p">[[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">,</span><span class="s1">&#39;z&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+        <span class="n">tck</span><span class="p">,</span> <span class="n">u</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">splprep</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">temp_df</span><span class="p">[</span><span class="s1">&#39;clip_len&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">t</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">20</span><span class="p">),</span> <span class="n">task</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">temp_df</span><span class="p">[</span><span class="s1">&#39;clip_len&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp_df</span><span class="p">[</span><span class="s1">&#39;clip_len&#39;</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span>
+
+        <span class="n">u_sym</span> <span class="o">=</span> <span class="n">symbols</span><span class="p">(</span><span class="s1">&#39;u&#39;</span><span class="p">)</span>
+        <span class="n">basis</span> <span class="o">=</span> <span class="n">bspline_basis_set</span><span class="p">(</span><span class="n">tck</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">tck</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">u_sym</span><span class="p">)</span>
+
+        <span class="n">bases</span><span class="p">[</span><span class="n">clip</span><span class="p">][</span><span class="n">pid_i</span><span class="p">]</span> <span class="o">=</span> <span class="n">basis</span>
+        <span class="n">info</span><span class="p">[</span><span class="n">clip</span><span class="p">][</span><span class="n">pid_i</span><span class="p">]</span> <span class="o">=</span> <span class="n">clip_name</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+
+<span class="c1"># print basis functions:</span>
+<span class="n">bases_to_display</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">bases</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">bases</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">basis</span> <span class="ow">in</span> <span class="n">bases_to_display</span><span class="p">:</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">basis</span><span class="o">==-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;...&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Basis </span><span class="si">{</span><span class="n">basis</span><span class="si">}</span><span class="s1">:&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">clip</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bases</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">pid_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bases</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+                <span class="n">basis_str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+                <span class="k">for</span> <span class="n">piece</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bases</span><span class="p">[</span><span class="n">clip</span><span class="p">][</span><span class="n">pid_i</span><span class="p">][</span><span class="n">basis</span><span class="p">]</span><span class="o">.</span><span class="n">args</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                    <span class="n">basis_str</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">((</span><span class="n">bases</span><span class="p">[</span><span class="n">clip</span><span class="p">][</span><span class="n">pid_i</span><span class="p">][</span><span class="n">basis</span><span class="p">]</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="n">piece</span><span class="p">])[</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="n">basis_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">*</span><span class="mi">17</span>
+                    <span class="n">basis_str</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">((</span><span class="n">bases</span><span class="p">[</span><span class="n">clip</span><span class="p">][</span><span class="n">pid_i</span><span class="p">][</span><span class="n">basis</span><span class="p">]</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="n">piece</span><span class="p">])[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">basis_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">*</span><span class="mi">13</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">info</span><span class="p">[</span><span class="n">clip</span><span class="p">][</span><span class="n">pid_i</span><span class="p">]</span><span class="si">:</span><span class="s1">10s</span><span class="si">}</span><span class="s1"> : </span><span class="si">{</span><span class="n">basis_str</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Basis 0:
+oceans 1   : (u &gt;= 0) &amp; (u &lt;= 0.210526315789474)
+                 -107.171875*u**3 + 67.6875*u**2 - 14.25*u + 1.0
+             
+oceans 2   : (u &gt;= 0) &amp; (u &lt;= 0.210526315789474)
+                 -107.171875*u**3 + 67.6875*u**2 - 14.25*u + 1.0
+             
+overcome 1 : (u &gt;= 0) &amp; (u &lt;= 0.210526315789474)
+                 -107.171875*u**3 + 67.6875*u**2 - 14.25*u + 1.0
+             
+overcome 2 : (u &gt;= 0) &amp; (u &lt;= 0.210526315789474)
+                 -107.171875*u**3 + 67.6875*u**2 - 14.25*u + 1.0
+             
+
+Basis 1:
+oceans 1   : (u &gt;= 0) &amp; (u &lt;= 0.210526315789474)
+                 261.499375*u**3 - 121.8375*u**2 + 14.25*u
+             (u &gt;= 0.210526315789474) &amp; (u &lt;= 0.263157894736842)
+                 -274.36*u**3 + 216.6*u**2 - 57.0*u + 5.0
+             
+oceans 2   : (u &gt;= 0) &amp; (u &lt;= 0.210526315789474)
+                 261.499375*u**3 - 121.8375*u**2 + 14.25*u
+             (u &gt;= 0.210526315789474) &amp; (u &lt;= 0.263157894736842)
+                 -274.36*u**3 + 216.6*u**2 - 57.0*u + 5.0
+             
+overcome 1 : (u &gt;= 0) &amp; (u &lt;= 0.210526315789474)
+                 261.499375*u**3 - 121.8375*u**2 + 14.25*u
+             (u &gt;= 0.210526315789474) &amp; (u &lt;= 0.263157894736842)
+                 -274.36*u**3 + 216.6*u**2 - 57.0*u + 5.0
+             
+overcome 2 : (u &gt;= 0) &amp; (u &lt;= 0.210526315789474)
+                 261.499375*u**3 - 121.8375*u**2 + 14.25*u
+             (u &gt;= 0.210526315789474) &amp; (u &lt;= 0.263157894736842)
+                 -274.36*u**3 + 216.6*u**2 - 57.0*u + 5.0
+             
+
+...
+
+Basis 14:
+oceans 1   : (u &gt;= 0.736842105263158) &amp; (u &lt;= 0.789473684210526)
+                 274.36*u**3 - 606.479999999999*u**2 + 446.879999999999*u - 109.76
+             (u &gt;= 0.789473684210526) &amp; (u &lt;= 1.0)
+                 -261.499375*u**3 + 662.660625*u**2 - 555.073125*u + 153.911875
+             
+oceans 2   : (u &gt;= 0.736842105263158) &amp; (u &lt;= 0.789473684210526)
+                 274.36*u**3 - 606.479999999999*u**2 + 446.879999999999*u - 109.76
+             (u &gt;= 0.789473684210526) &amp; (u &lt;= 1.0)
+                 -261.499375*u**3 + 662.660625*u**2 - 555.073125*u + 153.911875
+             
+overcome 1 : (u &gt;= 0.736842105263158) &amp; (u &lt;= 0.789473684210526)
+                 274.36*u**3 - 606.479999999999*u**2 + 446.879999999999*u - 109.76
+             (u &gt;= 0.789473684210526) &amp; (u &lt;= 1.0)
+                 -261.499375*u**3 + 662.660625*u**2 - 555.073125*u + 153.911875
+             
+overcome 2 : (u &gt;= 0.736842105263158) &amp; (u &lt;= 0.789473684210526)
+                 274.36*u**3 - 606.479999999999*u**2 + 446.879999999999*u - 109.76
+             (u &gt;= 0.789473684210526) &amp; (u &lt;= 1.0)
+                 -261.499375*u**3 + 662.660625*u**2 - 555.073125*u + 153.911875
+             
+
+Basis 15:
+oceans 1   : (u &gt;= 0.789473684210526) &amp; (u &lt;= 1.0)
+                 107.171875*u**3 - 253.828125*u**2 + 200.390625*u - 52.734375
+             
+oceans 2   : (u &gt;= 0.789473684210526) &amp; (u &lt;= 1.0)
+                 107.171875*u**3 - 253.828125*u**2 + 200.390625*u - 52.734375
+             
+overcome 1 : (u &gt;= 0.789473684210526) &amp; (u &lt;= 1.0)
+                 107.171875*u**3 - 253.828125*u**2 + 200.390625*u - 52.734375
+             
+overcome 2 : (u &gt;= 0.789473684210526) &amp; (u &lt;= 1.0)
+                 107.171875*u**3 - 253.828125*u**2 + 200.390625*u - 52.734375
+             
+
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./movie_trajectories"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="trajectories.html" title="previous page">Trajectory Properties</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Jason Liu<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    <script src="../_static/js/index.js"></script>
+    
+  </body>
+</html>
