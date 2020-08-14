@@ -10,6 +10,7 @@
   - file: imdb/imdb_rnn
   - file: imdb/imdb_lstm
 
-- chapter: Trajectory Divergence
+- chapter: Movie-Watching Trajectories
   sections:
-  - file: traj_div/div
+  - file: movie_trajectories/trajectories
+  - file: movie_trajectories/classification
