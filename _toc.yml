@@ -1,16 +1,16 @@
 - file: intro
 
-- chapter: MNIST Digit Classification
-  sections:
+- part: MNIST Digit Classification
+  chapters:
   - file: mnist/mnist_sklearn
   - file: mnist/mnist_pytorch
 
-- chapter: IMDb Sentiment Analysis
-  sections:
+- part: IMDb Sentiment Analysis
+  chapters:
   - file: imdb/imdb_rnn
   - file: imdb/imdb_lstm
 
-- chapter: Movie-Watching Trajectories
-  sections:
+- part: Movie-Watching Trajectories
+  chapters:
   - file: movie_trajectories/trajectories
   - file: movie_trajectories/classification
