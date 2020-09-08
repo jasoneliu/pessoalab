@@ -2,9 +2,10 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>IMDb with Vanilla RNNs &#8212; Jason Liu</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
     <link href="../_static/css/index.css" rel="stylesheet">
@@ -14,7 +15,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-dropdown.css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/sphinx-book-theme.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -24,12 +25,10 @@
     <script src="../_static/togglebutton.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
-    <script src="../_static/mystnb.js"></script>
     <script src="../_static/sphinx-book-theme.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -129,6 +128,10 @@
 
  <!-- To handle the deprecated key -->
 
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
 </div>
 
 
@@ -198,6 +201,28 @@
 
         <!-- Launch buttons -->
 
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/jasoneliu/pessoalab2020/master?urlpath=tree/imdb/imdb_rnn.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        <a class="colab-button" href="https://colab.research.google.com/github/jasoneliu/pessoalab2020/blob/master/imdb/imdb_rnn.ipynb"><button type="button" class="btn btn-secondary topbarbtn"
+                title="Launch Colab" data-toggle="tooltip" data-placement="left"><img class="colab-button-logo"
+                    src="../_static/images/logo_colab.png"
+                    alt="Interact on Colab">Colab</button></a>
+        
+        
+    </div>
+</div>
+
     </div>
 
     <!-- Table of contents -->
@@ -240,7 +265,7 @@
 <p>The IMDb Movie Review Dataset contains 50,000 reviews, split 50/50 into positive and negative reviews. The goal is to create a model that can accurately predict the sentiment (positive or negative) of a given review.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span><span class="p">,</span> <span class="n">optim</span>
 <span class="kn">from</span> <span class="nn">torchtext</span> <span class="kn">import</span> <span class="n">data</span><span class="p">,</span> <span class="n">datasets</span>
 <span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
@@ -264,7 +289,7 @@
 <p>In order for a review to become the input of a neural network, we need to preprocess the text. The first step is to tokenize the text, meaning to break up the text into individual units that are easily understood, such as words. The spacy tokenizer does this fairly well by splitting text by spaces and separating punctuation. The reviews also contain &lt;br /&gt; tags which need to be removed, which necessitates a custom tokenizer based on spacy.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">custom_tokenizer</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">custom_tokenizer</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
     <span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;en_core_web_sm&#39;</span><span class="p">,</span> <span class="n">disable</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;tagger&#39;</span><span class="p">,</span> <span class="s1">&#39;parser&#39;</span><span class="p">,</span> <span class="s1">&#39;ner&#39;</span><span class="p">,</span> <span class="s1">&#39;textcat&#39;</span><span class="p">,</span> <span class="s1">&#39;...&#39;</span><span class="p">])</span>
 
     <span class="n">prefixes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">nlp</span><span class="o">.</span><span class="n">Defaults</span><span class="o">.</span><span class="n">prefixes</span><span class="p">)</span>
@@ -285,7 +310,7 @@
 <p>Using the custom tokenizer, we can load and process the entire IMDb dataset (text and labels) using torchtext fields. To make it easier to access the dataset without having to spend time tokenizing every time, we can save the processed data into a json file.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># set seed for reproducibility</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set seed for reproducibility</span>
 <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">deterministic</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">=</span> <span class="kc">False</span>
@@ -308,7 +333,7 @@
 <p>Now we can easily load in the dataset. We also want to split the dataset into train/validation/test sets with sizes 60%/20%/20%.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LABEL</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">LabelField</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">LABEL</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">LabelField</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
 <span class="n">TEXT</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">include_lengths</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">imdb</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">TabularDataset</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;imdb.json&#39;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;JSON&#39;</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="p">({</span><span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">,</span><span class="n">LABEL</span><span class="p">),</span> <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;text&#39;</span><span class="p">,</span><span class="n">TEXT</span><span class="p">)}))</span>
 <span class="n">train_set</span><span class="p">,</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">imdb</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">split_ratio</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
@@ -321,7 +346,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Training set size:   30000
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Training set size:   30000
 Validation set size: 10000
 Test set size:       10000
 </pre></div>
@@ -331,14 +356,13 @@ Test set size:       10000
 <p>Let’s take a look at one example review. For this dataset, a label of 0 is negative and 1 is positive.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Tokenized text: </span><span class="si">{</span><span class="n">imdb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Tokenized text: </span><span class="si">{</span><span class="n">imdb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Label: </span><span class="si">{</span><span class="n">imdb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">label</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-Tokenized text: [&#39;based&#39;, &#39;on&#39;, &#39;an&#39;, &#39;actual&#39;, &#39;story&#39;, &#39;,&#39;, &#39;john&#39;, &#39;boorman&#39;, &#39;shows&#39;, &#39;the&#39;, &#39;struggle&#39;, &#39;of&#39;, &#39;an&#39;, &#39;american&#39;, &#39;doctor&#39;, &#39;,&#39;, &#39;whose&#39;, &#39;husband&#39;, &#39;and&#39;, &#39;son&#39;, &#39;were&#39;, &#39;murdered&#39;, &#39;and&#39;, &#39;she&#39;, &#39;was&#39;, &#39;continually&#39;, &#39;plagued&#39;, &#39;with&#39;, &#39;her&#39;, &#39;loss&#39;, &#39;.&#39;, &#39;a&#39;, &#39;holiday&#39;, &#39;to&#39;, &#39;burma&#39;, &#39;with&#39;, &#39;her&#39;, &#39;sister&#39;, &#39;seemed&#39;, &#39;like&#39;, &#39;a&#39;, &#39;good&#39;, &#39;idea&#39;, &#39;to&#39;, &#39;get&#39;, &#39;away&#39;, &#39;from&#39;, &#39;it&#39;, &#39;all&#39;, &#39;,&#39;, &#39;but&#39;, &#39;when&#39;, &#39;her&#39;, &#39;passport&#39;, &#39;was&#39;, &#39;stolen&#39;, &#39;in&#39;, &#39;rangoon&#39;, &#39;,&#39;, &#39;she&#39;, &#39;could&#39;, &#39;not&#39;, &#39;leave&#39;, &#39;the&#39;, &#39;country&#39;, &#39;with&#39;, &#39;her&#39;, &#39;sister&#39;, &#39;,&#39;, &#39;and&#39;, &#39;was&#39;, &#39;forced&#39;, &#39;to&#39;, &#39;stay&#39;, &#39;back&#39;, &#39;until&#39;, &#39;she&#39;, &#39;could&#39;, &#39;get&#39;, &#39;i.d.&#39;, &#39;papers&#39;, &#39;from&#39;, &#39;the&#39;, &#39;american&#39;, &#39;embassy&#39;, &#39;.&#39;, &#39;to&#39;, &#39;fill&#39;, &#39;in&#39;, &#39;a&#39;, &#39;day&#39;, &#39;before&#39;, &#39;she&#39;, &#39;could&#39;, &#39;fly&#39;, &#39;out&#39;, &#39;,&#39;, &#39;she&#39;, &#39;took&#39;, &#39;a&#39;, &#39;trip&#39;, &#39;into&#39;, &#39;the&#39;, &#39;countryside&#39;, &#39;with&#39;, &#39;a&#39;, &#39;tour&#39;, &#39;guide&#39;, &#39;.&#39;, &#39;&quot;&#39;, &#39;i&#39;, &#39;tried&#39;, &#39;finding&#39;, &#39;something&#39;, &#39;in&#39;, &#39;those&#39;, &#39;stone&#39;, &#39;statues&#39;, &#39;,&#39;, &#39;but&#39;, &#39;nothing&#39;, &#39;stirred&#39;, &#39;in&#39;, &#39;me&#39;, &#39;.&#39;, &#39;i&#39;, &#39;was&#39;, &#39;stone&#39;, &#39;myself&#39;, &#39;.&#39;, &#39;&quot;&#39;, &#39;suddenly&#39;, &#39;all&#39;, &#39;hell&#39;, &#39;broke&#39;, &#39;loose&#39;, &#39;and&#39;, &#39;she&#39;, &#39;was&#39;, &#39;caught&#39;, &#39;in&#39;, &#39;a&#39;, &#39;political&#39;, &#39;revolt&#39;, &#39;.&#39;, &#39;just&#39;, &#39;when&#39;, &#39;it&#39;, &#39;looked&#39;, &#39;like&#39;, &#39;she&#39;, &#39;had&#39;, &#39;escaped&#39;, &#39;and&#39;, &#39;safely&#39;, &#39;boarded&#39;, &#39;a&#39;, &#39;train&#39;, &#39;,&#39;, &#39;she&#39;, &#39;saw&#39;, &#39;her&#39;, &#39;tour&#39;, &#39;guide&#39;, &#39;get&#39;, &#39;beaten&#39;, &#39;and&#39;, &#39;shot&#39;, &#39;.&#39;, &#39;in&#39;, &#39;a&#39;, &#39;split&#39;, &#39;second&#39;, &#39;she&#39;, &#39;decided&#39;, &#39;to&#39;, &#39;jump&#39;, &#39;from&#39;, &#39;the&#39;, &#39;moving&#39;, &#39;train&#39;, &#39;and&#39;, &#39;try&#39;, &#39;to&#39;, &#39;rescue&#39;, &#39;him&#39;, &#39;,&#39;, &#39;with&#39;, &#39;no&#39;, &#39;thought&#39;, &#39;of&#39;, &#39;herself&#39;, &#39;.&#39;, &#39;continually&#39;, &#39;her&#39;, &#39;life&#39;, &#39;was&#39;, &#39;in&#39;, &#39;danger&#39;, &#39;.&#39;, &#39;here&#39;, &#39;is&#39;, &#39;a&#39;, &#39;woman&#39;, &#39;who&#39;, &#39;demonstrated&#39;, &#39;spontaneous&#39;, &#39;,&#39;, &#39;selfless&#39;, &#39;charity&#39;, &#39;,&#39;, &#39;risking&#39;, &#39;her&#39;, &#39;life&#39;, &#39;to&#39;, &#39;save&#39;, &#39;another&#39;, &#39;.&#39;, &#39;patricia&#39;, &#39;arquette&#39;, &#39;is&#39;, &#39;beautiful&#39;, &#39;,&#39;, &#39;and&#39;, &#39;not&#39;, &#39;just&#39;, &#39;to&#39;, &#39;look&#39;, &#39;at&#39;, &#39;;&#39;, &#39;she&#39;, &#39;has&#39;, &#39;a&#39;, &#39;beautiful&#39;, &#39;heart&#39;, &#39;.&#39;, &#39;this&#39;, &#39;is&#39;, &#39;an&#39;, &#39;unforgettable&#39;, &#39;story&#39;, &#39;.&#39;, &#39;&quot;&#39;, &#39;we&#39;, &#39;are&#39;, &#39;taught&#39;, &#39;that&#39;, &#39;suffering&#39;, &#39;is&#39;, &#39;the&#39;, &#39;one&#39;, &#39;promise&#39;, &#39;that&#39;, &#39;life&#39;, &#39;always&#39;, &#39;keeps&#39;, &#39;.&#39;, &#39;&quot;&#39;]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Tokenized text: [&#39;based&#39;, &#39;on&#39;, &#39;an&#39;, &#39;actual&#39;, &#39;story&#39;, &#39;,&#39;, &#39;john&#39;, &#39;boorman&#39;, &#39;shows&#39;, &#39;the&#39;, &#39;struggle&#39;, &#39;of&#39;, &#39;an&#39;, &#39;american&#39;, &#39;doctor&#39;, &#39;,&#39;, &#39;whose&#39;, &#39;husband&#39;, &#39;and&#39;, &#39;son&#39;, &#39;were&#39;, &#39;murdered&#39;, &#39;and&#39;, &#39;she&#39;, &#39;was&#39;, &#39;continually&#39;, &#39;plagued&#39;, &#39;with&#39;, &#39;her&#39;, &#39;loss&#39;, &#39;.&#39;, &#39;a&#39;, &#39;holiday&#39;, &#39;to&#39;, &#39;burma&#39;, &#39;with&#39;, &#39;her&#39;, &#39;sister&#39;, &#39;seemed&#39;, &#39;like&#39;, &#39;a&#39;, &#39;good&#39;, &#39;idea&#39;, &#39;to&#39;, &#39;get&#39;, &#39;away&#39;, &#39;from&#39;, &#39;it&#39;, &#39;all&#39;, &#39;,&#39;, &#39;but&#39;, &#39;when&#39;, &#39;her&#39;, &#39;passport&#39;, &#39;was&#39;, &#39;stolen&#39;, &#39;in&#39;, &#39;rangoon&#39;, &#39;,&#39;, &#39;she&#39;, &#39;could&#39;, &#39;not&#39;, &#39;leave&#39;, &#39;the&#39;, &#39;country&#39;, &#39;with&#39;, &#39;her&#39;, &#39;sister&#39;, &#39;,&#39;, &#39;and&#39;, &#39;was&#39;, &#39;forced&#39;, &#39;to&#39;, &#39;stay&#39;, &#39;back&#39;, &#39;until&#39;, &#39;she&#39;, &#39;could&#39;, &#39;get&#39;, &#39;i.d.&#39;, &#39;papers&#39;, &#39;from&#39;, &#39;the&#39;, &#39;american&#39;, &#39;embassy&#39;, &#39;.&#39;, &#39;to&#39;, &#39;fill&#39;, &#39;in&#39;, &#39;a&#39;, &#39;day&#39;, &#39;before&#39;, &#39;she&#39;, &#39;could&#39;, &#39;fly&#39;, &#39;out&#39;, &#39;,&#39;, &#39;she&#39;, &#39;took&#39;, &#39;a&#39;, &#39;trip&#39;, &#39;into&#39;, &#39;the&#39;, &#39;countryside&#39;, &#39;with&#39;, &#39;a&#39;, &#39;tour&#39;, &#39;guide&#39;, &#39;.&#39;, &#39;&quot;&#39;, &#39;i&#39;, &#39;tried&#39;, &#39;finding&#39;, &#39;something&#39;, &#39;in&#39;, &#39;those&#39;, &#39;stone&#39;, &#39;statues&#39;, &#39;,&#39;, &#39;but&#39;, &#39;nothing&#39;, &#39;stirred&#39;, &#39;in&#39;, &#39;me&#39;, &#39;.&#39;, &#39;i&#39;, &#39;was&#39;, &#39;stone&#39;, &#39;myself&#39;, &#39;.&#39;, &#39;&quot;&#39;, &#39;suddenly&#39;, &#39;all&#39;, &#39;hell&#39;, &#39;broke&#39;, &#39;loose&#39;, &#39;and&#39;, &#39;she&#39;, &#39;was&#39;, &#39;caught&#39;, &#39;in&#39;, &#39;a&#39;, &#39;political&#39;, &#39;revolt&#39;, &#39;.&#39;, &#39;just&#39;, &#39;when&#39;, &#39;it&#39;, &#39;looked&#39;, &#39;like&#39;, &#39;she&#39;, &#39;had&#39;, &#39;escaped&#39;, &#39;and&#39;, &#39;safely&#39;, &#39;boarded&#39;, &#39;a&#39;, &#39;train&#39;, &#39;,&#39;, &#39;she&#39;, &#39;saw&#39;, &#39;her&#39;, &#39;tour&#39;, &#39;guide&#39;, &#39;get&#39;, &#39;beaten&#39;, &#39;and&#39;, &#39;shot&#39;, &#39;.&#39;, &#39;in&#39;, &#39;a&#39;, &#39;split&#39;, &#39;second&#39;, &#39;she&#39;, &#39;decided&#39;, &#39;to&#39;, &#39;jump&#39;, &#39;from&#39;, &#39;the&#39;, &#39;moving&#39;, &#39;train&#39;, &#39;and&#39;, &#39;try&#39;, &#39;to&#39;, &#39;rescue&#39;, &#39;him&#39;, &#39;,&#39;, &#39;with&#39;, &#39;no&#39;, &#39;thought&#39;, &#39;of&#39;, &#39;herself&#39;, &#39;.&#39;, &#39;continually&#39;, &#39;her&#39;, &#39;life&#39;, &#39;was&#39;, &#39;in&#39;, &#39;danger&#39;, &#39;.&#39;, &#39;here&#39;, &#39;is&#39;, &#39;a&#39;, &#39;woman&#39;, &#39;who&#39;, &#39;demonstrated&#39;, &#39;spontaneous&#39;, &#39;,&#39;, &#39;selfless&#39;, &#39;charity&#39;, &#39;,&#39;, &#39;risking&#39;, &#39;her&#39;, &#39;life&#39;, &#39;to&#39;, &#39;save&#39;, &#39;another&#39;, &#39;.&#39;, &#39;patricia&#39;, &#39;arquette&#39;, &#39;is&#39;, &#39;beautiful&#39;, &#39;,&#39;, &#39;and&#39;, &#39;not&#39;, &#39;just&#39;, &#39;to&#39;, &#39;look&#39;, &#39;at&#39;, &#39;;&#39;, &#39;she&#39;, &#39;has&#39;, &#39;a&#39;, &#39;beautiful&#39;, &#39;heart&#39;, &#39;.&#39;, &#39;this&#39;, &#39;is&#39;, &#39;an&#39;, &#39;unforgettable&#39;, &#39;story&#39;, &#39;.&#39;, &#39;&quot;&#39;, &#39;we&#39;, &#39;are&#39;, &#39;taught&#39;, &#39;that&#39;, &#39;suffering&#39;, &#39;is&#39;, &#39;the&#39;, &#39;one&#39;, &#39;promise&#39;, &#39;that&#39;, &#39;life&#39;, &#39;always&#39;, &#39;keeps&#39;, &#39;.&#39;, &#39;&quot;&#39;]
 
 Label: 1
 </pre></div>
@@ -349,14 +373,14 @@ Label: 1
 <p>By setting a maximum of 25,000 tokens, we can prevent the model from learning the sentiment of every single token. All other words are simply replaced with &lt;unk&gt;, which will be ignored by the model.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TEXT</span><span class="o">.</span><span class="n">build_vocab</span><span class="p">(</span><span class="n">train_set</span><span class="p">,</span> <span class="n">max_size</span> <span class="o">=</span> <span class="mi">25000</span><span class="p">,</span> <span class="n">vectors</span> <span class="o">=</span> <span class="s2">&quot;glove.6B.100d&quot;</span><span class="p">,</span> <span class="n">unk_init</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="o">.</span><span class="n">normal_</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">TEXT</span><span class="o">.</span><span class="n">build_vocab</span><span class="p">(</span><span class="n">train_set</span><span class="p">,</span> <span class="n">max_size</span> <span class="o">=</span> <span class="mi">25000</span><span class="p">,</span> <span class="n">vectors</span> <span class="o">=</span> <span class="s2">&quot;glove.6B.100d&quot;</span><span class="p">,</span> <span class="n">unk_init</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="o">.</span><span class="n">normal_</span><span class="p">)</span>
 <span class="n">LABEL</span><span class="o">.</span><span class="n">build_vocab</span><span class="p">(</span><span class="n">train_set</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">TEXT</span><span class="o">.</span><span class="n">vocab</span><span class="o">.</span><span class="n">freqs</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">20</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[(&#39;the&#39;, 397969), (&#39;.&#39;, 324479), (&#39;,&#39;, 324093), (&#39;and&#39;, 192895), (&#39;a&#39;, 191873), (&#39;of&#39;, 172229), (&#39;to&#39;, 160056), (&#39;is&#39;, 128961), (&#39;it&#39;, 113936), (&#39;in&#39;, 111605), (&#39;i&#39;, 104615), (&#39;this&#39;, 89961), (&#39;that&#39;, 86262), (&#39;&quot;&#39;, 77757), (&quot;&#39;s&quot;, 72818), (&#39;-&#39;, 61786), (&#39;was&#39;, 59883), (&#39;as&#39;, 54536), (&#39;movie&#39;, 52881), (&#39;for&#39;, 52036)]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[(&#39;the&#39;, 397969), (&#39;.&#39;, 324479), (&#39;,&#39;, 324093), (&#39;and&#39;, 192895), (&#39;a&#39;, 191873), (&#39;of&#39;, 172229), (&#39;to&#39;, 160056), (&#39;is&#39;, 128961), (&#39;it&#39;, 113936), (&#39;in&#39;, 111605), (&#39;i&#39;, 104615), (&#39;this&#39;, 89961), (&#39;that&#39;, 86262), (&#39;&quot;&#39;, 77757), (&quot;&#39;s&quot;, 72818), (&#39;-&#39;, 61786), (&#39;was&#39;, 59883), (&#39;as&#39;, 54536), (&#39;movie&#39;, 52881), (&#39;for&#39;, 52036)]
 </pre></div>
 </div>
 </div>
@@ -364,7 +388,7 @@ Label: 1
 <p>We want to iterate through the data in batches for SGD. However, all sequences in a batch need to have the same length. This is accomplished by adding padding to the end of sequences, represented as &lt;pad&gt;. To minimize the amount of padding needed, we can use BucketIterators that sort the reviews by length and allow for batch iteration.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
 <span class="n">train_itr</span><span class="p">,</span> <span class="n">val_itr</span><span class="p">,</span> <span class="n">test_itr</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">BucketIterator</span><span class="o">.</span><span class="n">splits</span><span class="p">((</span><span class="n">train_set</span><span class="p">,</span> <span class="n">val_set</span><span class="p">,</span> <span class="n">test_set</span><span class="p">),</span> <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">64</span><span class="p">,</span> <span class="n">sort_key</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">text</span><span class="p">),</span> <span class="n">sort_within_batch</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">device</span> <span class="o">=</span> <span class="n">device</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -379,7 +403,7 @@ Label: 1
 Dropout is also used in the embedding and hidden layers to randomly ignore/drop out nodes, which helps prevent overfitting.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">RNN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">RNN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_dim</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">,</span> <span class="n">hidden_dim</span><span class="p">,</span> <span class="n">output_dim</span><span class="p">,</span> <span class="n">dropout</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">embedding_dim</span> <span class="o">=</span> <span class="n">embedding_dim</span>
@@ -408,7 +432,7 @@ Dropout is also used in the embedding and hidden layers to randomly ignore/drop 
 <p>We define methods for accuracy, training, and evaluation of single batches, then combine them into a method to train and validate a model over multiple epochs, returning loss and accuracy as it trains.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">accuracy</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">accuracy</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
     <span class="n">rounded_outputs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">outputs</span><span class="p">))</span>
     <span class="n">correct</span> <span class="o">=</span> <span class="p">(</span><span class="n">rounded_outputs</span> <span class="o">==</span> <span class="n">labels</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
     <span class="n">acc</span> <span class="o">=</span> <span class="n">correct</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">correct</span><span class="p">)</span>
@@ -498,7 +522,7 @@ Dropout is also used in the embedding and hidden layers to randomly ignore/drop 
 <p>Let’s define</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">RNN</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">TEXT</span><span class="o">.</span><span class="n">vocab</span><span class="p">),</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">RNN</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">TEXT</span><span class="o">.</span><span class="n">vocab</span><span class="p">),</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
 <span class="n">criterion</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">BCEWithLogitsLoss</span><span class="p">()</span>
 <span class="n">optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
 <span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">15</span>
@@ -510,7 +534,7 @@ Dropout is also used in the embedding and hidden layers to randomly ignore/drop 
 </div>
 <div class="cell_output docutils container">
 <img alt="../_images/imdb_rnn_21_0.png" src="../_images/imdb_rnn_21_0.png" />
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Accuracy
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Accuracy
 	training         	 (min:    0.510, max:    0.601, cur:    0.601)
 	validation       	 (min:    0.518, max:    0.620, cur:    0.603)
 Loss
@@ -524,7 +548,7 @@ Training time: 175.879s
 <p>Now let’s see how the trained model performs on a test set it’s never seen before.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 <span class="n">test_loss</span><span class="p">,</span> <span class="n">test_acc</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">test_itr</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Test loss: </span><span class="si">{</span><span class="n">test_loss</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span> <span class="p">)</span>
@@ -533,7 +557,7 @@ Training time: 175.879s
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Test loss: 0.648
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Test loss: 0.648
 Test accuracy: 61.69%
 </pre></div>
 </div>
@@ -542,7 +566,7 @@ Test accuracy: 61.69%
 <p>62% isn’t a great accuracy since 50% is chance performance. We can improve the model by using pretrained word embeddings that are used to initialize the weights to the embedding layer instead of using random initialization. This change increases the model’s rate of improvement and likelihood of finding a good local minimum or even global minimum for loss.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">RNN</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">TEXT</span><span class="o">.</span><span class="n">vocab</span><span class="p">),</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">RNN</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">TEXT</span><span class="o">.</span><span class="n">vocab</span><span class="p">),</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
 <span class="n">criterion</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">BCEWithLogitsLoss</span><span class="p">()</span>
 <span class="n">optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
 <span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">15</span>
@@ -558,7 +582,7 @@ Test accuracy: 61.69%
 </div>
 <div class="cell_output docutils container">
 <img alt="../_images/imdb_rnn_25_0.png" src="../_images/imdb_rnn_25_0.png" />
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Accuracy
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Accuracy
 	training         	 (min:    0.513, max:    0.625, cur:    0.592)
 	validation       	 (min:    0.557, max:    0.724, cur:    0.688)
 Loss
@@ -571,7 +595,7 @@ Training time: 174.030s
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 <span class="n">test_loss</span><span class="p">,</span> <span class="n">test_acc</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">test_itr</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Test loss: </span><span class="si">{</span><span class="n">test_loss</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span> <span class="p">)</span>
@@ -580,7 +604,7 @@ Training time: 174.030s
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Test loss: 0.574
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Test loss: 0.574
 Test accuracy: 72.12%
 </pre></div>
 </div>
@@ -595,7 +619,7 @@ Test accuracy: 72.12%
 <p>In essence, the roles of each set remain the same, but apply to multiple folds instead of one. The validation set is used for hyperparameter optimization. In this case, optimization is done using a grid search, which finds the lowest mean loss across all k inner folds. Similarly, the test set is used to find the mean test loss and accuracy across all k outer folds.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">grid_search</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">train_set</span><span class="p">,</span> <span class="n">train_itr</span><span class="p">,</span> <span class="n">val_set</span><span class="p">,</span> <span class="n">val_itr</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">num_epochs</span><span class="p">,</span> <span class="n">lr_params</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">grid_search</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">train_set</span><span class="p">,</span> <span class="n">train_itr</span><span class="p">,</span> <span class="n">val_set</span><span class="p">,</span> <span class="n">val_itr</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">num_epochs</span><span class="p">,</span> <span class="n">lr_params</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
     <span class="n">val_losses</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lr_params</span><span class="p">))</span>
 
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">lr</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lr_params</span><span class="p">):</span>
@@ -621,7 +645,7 @@ Test accuracy: 72.12%
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">cross_validate</span><span class="p">(</span><span class="n">torch_dataset</span><span class="p">,</span> <span class="n">outer_kfold</span><span class="p">,</span> <span class="n">num_outer_epochs</span><span class="p">,</span> <span class="n">inner_kfold</span><span class="p">,</span> <span class="n">num_inner_epochs</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">lr_params</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">nested</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">cross_validate</span><span class="p">(</span><span class="n">torch_dataset</span><span class="p">,</span> <span class="n">outer_kfold</span><span class="p">,</span> <span class="n">num_outer_epochs</span><span class="p">,</span> <span class="n">inner_kfold</span><span class="p">,</span> <span class="n">num_inner_epochs</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">lr_params</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">nested</span><span class="p">):</span>
     <span class="n">time_start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
     <span class="n">final_loss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">outer_kfold</span><span class="o">.</span><span class="n">n_splits</span><span class="p">)</span>
     <span class="n">final_acc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">outer_kfold</span><span class="o">.</span><span class="n">n_splits</span><span class="p">)</span>
@@ -715,7 +739,7 @@ Test accuracy: 72.12%
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cross_validate</span><span class="p">(</span><span class="n">torch_dataset</span><span class="o">=</span><span class="n">imdb</span><span class="p">,</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cross_validate</span><span class="p">(</span><span class="n">torch_dataset</span><span class="o">=</span><span class="n">imdb</span><span class="p">,</span>
                <span class="n">outer_kfold</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
                <span class="n">num_outer_epochs</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
                <span class="n">inner_kfold</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
@@ -729,7 +753,7 @@ Test accuracy: 72.12%
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Outer Fold 1/3:
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Outer Fold 1/3:
   Inner Fold 1/3:
     Grid Search: lr = 0.01 ... Done.
                  lr = 0.03 ... Done.

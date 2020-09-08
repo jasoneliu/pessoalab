@@ -2,9 +2,10 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MNIST with PyTorch &#8212; Jason Liu</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
     <link href="../_static/css/index.css" rel="stylesheet">
@@ -14,7 +15,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-dropdown.css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/sphinx-book-theme.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -24,12 +25,10 @@
     <script src="../_static/togglebutton.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
-    <script src="../_static/mystnb.js"></script>
     <script src="../_static/sphinx-book-theme.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -129,6 +128,10 @@
 
  <!-- To handle the deprecated key -->
 
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
 </div>
 
 
@@ -198,6 +201,28 @@
 
         <!-- Launch buttons -->
 
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/jasoneliu/pessoalab2020/master?urlpath=tree/mnist/mnist_pytorch.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        <a class="colab-button" href="https://colab.research.google.com/github/jasoneliu/pessoalab2020/blob/master/mnist/mnist_pytorch.ipynb"><button type="button" class="btn btn-secondary topbarbtn"
+                title="Launch Colab" data-toggle="tooltip" data-placement="left"><img class="colab-button-logo"
+                    src="../_static/images/logo_colab.png"
+                    alt="Interact on Colab">Colab</button></a>
+        
+        
+    </div>
+</div>
+
     </div>
 
     <!-- Table of contents -->
@@ -241,7 +266,7 @@
 <p>Begin with imports:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span><span class="p">,</span> <span class="n">optim</span>
 <span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">random_split</span>
 <span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
@@ -264,7 +289,7 @@
 <p>The full MNIST dataset is split into training (42000), validation (18000), and test (10000) sets. A batch size of 64 is also defined for stochastic gradient descent:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">deterministic</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">=</span> <span class="kc">False</span>
 
@@ -283,7 +308,7 @@
 <p>Let’s show all digits in a single batch:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">):</span>
     <span class="n">img</span> <span class="o">=</span> <span class="n">img</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="c1">#unnormalize</span>
     <span class="n">npimg</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">npimg</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
@@ -303,7 +328,7 @@
 <p>We define logistic regression as a two-layer neural net (784 input nodes for pixels, 10 output nodes for digit classification):</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">LogReg</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">LogReg</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">LogReg</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">linear</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">784</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
@@ -318,7 +343,7 @@
 <p>Use a grid search to optimize learning rate:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">trainable_logreg</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">trainable_logreg</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
     <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cuda:0&#39;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
     
     <span class="n">model</span> <span class="o">=</span> <span class="n">LogReg</span><span class="p">()</span>
@@ -356,7 +381,7 @@
 <tr><td>trainable_logreg_4bda0_00001</td><td>TERMINATED</td><td>     </td><td style="text-align: right;">0.03</td><td style="text-align: right;">0.282862</td><td style="text-align: right;">    10</td><td style="text-align: right;">         170.787</td></tr>
 <tr><td>trainable_logreg_4bda0_00002</td><td>TERMINATED</td><td>     </td><td style="text-align: right;">0.1 </td><td style="text-align: right;">0.318506</td><td style="text-align: right;">    10</td><td style="text-align: right;">         172.697</td></tr>
 </tbody>
-</table><br><br></div><div class="output text_plain highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;ray.tune.analysis.experiment_analysis.ExperimentAnalysis at 0x19951a446c8&gt;
+</table><br><br></div><div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;ray.tune.analysis.experiment_analysis.ExperimentAnalysis at 0x19951a446c8&gt;
 </pre></div>
 </div>
 </div>
@@ -364,7 +389,7 @@
 <p>Train the model using stochastic gradient descent. To evaluate the classifier’s capabilities, we can we plot the accuracy and loss for training and validation sets as functions of the number of training epochs. After training, we can evaluate the model with the test set:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">train_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">num_epochs</span><span class="p">,</span> <span class="n">reshape</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">train_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">num_epochs</span><span class="p">,</span> <span class="n">reshape</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
     <span class="n">time_start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
     <span class="n">best_val_loss</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)</span>
     <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cuda:0&#39;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
@@ -445,7 +470,7 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">=</span><span class="n">LogReg</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">=</span><span class="n">LogReg</span><span class="p">()</span>
 <span class="n">criterion</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">()</span>
 <span class="n">optimizer</span><span class="o">=</span><span class="n">optim</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.03</span><span class="p">)</span>
 <span class="n">num_epochs</span><span class="o">=</span><span class="mi">20</span>
@@ -455,7 +480,7 @@
 </div>
 <div class="cell_output docutils container">
 <img alt="../_images/mnist_pytorch_14_0.png" src="../_images/mnist_pytorch_14_0.png" />
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>accuracy
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>accuracy
 	training         	 (min:    0.855, max:    0.925, cur:    0.925)
 	validation       	 (min:    0.873, max:    0.915, cur:    0.911)
 log loss
@@ -471,7 +496,7 @@ Test accuracy: 92.160%
 <p>We can also plot a confusion matrix to see the classifier’s accuracy for different digits:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">confusion_matrix</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">reshape</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">confusion_matrix</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">reshape</span><span class="p">):</span>
     <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cuda:0&#39;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
 
     <span class="n">cm</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
@@ -503,7 +528,7 @@ Test accuracy: 92.160%
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">confusion_matrix</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="s1">&#39;Logistic Regression&#39;</span><span class="p">,</span><span class="n">reshape</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">confusion_matrix</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="s1">&#39;Logistic Regression&#39;</span><span class="p">,</span><span class="n">reshape</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -517,7 +542,7 @@ Test accuracy: 92.160%
 <p>We define a MLP with two hidden layers, one with 128 nodes and the other with 64 nodes. Similar to logistic regression, there are 784 input nodes and 10 output nodes:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MLP</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MLP</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MLP</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hidden_1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">784</span><span class="p">,</span><span class="mi">128</span><span class="p">)</span>
@@ -535,7 +560,7 @@ Test accuracy: 92.160%
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">trainable_mlp</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">trainable_mlp</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
     <span class="n">time_start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
     <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cuda:0&#39;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
     
@@ -567,7 +592,7 @@ Test accuracy: 92.160%
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[2m[36m(pid=8108)[0m Tuning time: 167.976s
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Faint -Color-Faint-Cyan">(pid=8108)</span> Tuning time: 167.976s
 </pre></div>
 </div>
 <div class="output text_html">== Status ==<br>Memory usage on this node: 8.6/23.9 GiB<br>Using FIFO scheduling algorithm.<br>Resources requested: 0/8 CPUs, 0/0 GPUs, 0.0/9.77 GiB heap, 0.0/3.37 GiB objects<br>Result logdir: C:\Users\jl208\ray_results\trainable_mlp<br>Number of trials: 3 (3 TERMINATED)<br><table>
@@ -579,14 +604,14 @@ Test accuracy: 92.160%
 <tr><td>trainable_mlp_d8b07_00001</td><td>TERMINATED</td><td>     </td><td style="text-align: right;">0.03</td><td style="text-align: right;">0.101972 </td><td style="text-align: right;">    10</td><td style="text-align: right;">         166.59 </td></tr>
 <tr><td>trainable_mlp_d8b07_00002</td><td>TERMINATED</td><td>     </td><td style="text-align: right;">0.1 </td><td style="text-align: right;">0.0530744</td><td style="text-align: right;">    10</td><td style="text-align: right;">         167.97 </td></tr>
 </tbody>
-</table><br><br></div><div class="output text_plain highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;ray.tune.analysis.experiment_analysis.ExperimentAnalysis at 0x19a90a50948&gt;
+</table><br><br></div><div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;ray.tune.analysis.experiment_analysis.ExperimentAnalysis at 0x19a90a50948&gt;
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">=</span><span class="n">MLP</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">=</span><span class="n">MLP</span><span class="p">()</span>
 <span class="n">criterion</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">()</span>
 <span class="n">optimizer</span><span class="o">=</span><span class="n">optim</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 <span class="n">num_epochs</span><span class="o">=</span><span class="mi">20</span>
@@ -596,7 +621,7 @@ Test accuracy: 92.160%
 </div>
 <div class="cell_output docutils container">
 <img alt="../_images/mnist_pytorch_22_0.png" src="../_images/mnist_pytorch_22_0.png" />
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>accuracy
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>accuracy
 	training         	 (min:    0.822, max:    0.995, cur:    0.995)
 	validation       	 (min:    0.802, max:    0.976, cur:    0.976)
 log loss
@@ -611,7 +636,7 @@ Test accuracy: 97.660%
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">confusion_matrix</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="s1">&#39;MLP&#39;</span><span class="p">,</span><span class="n">reshape</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">confusion_matrix</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="s1">&#39;MLP&#39;</span><span class="p">,</span><span class="n">reshape</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -625,7 +650,7 @@ Test accuracy: 97.660%
 <p>We define a CNN with two convolution layers, each with 5x5 kernels. We have a max-pooling layer with stride 2 after each convolutional layer. Flattened tensors are then passed throung a dense layer and MLP:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">CNN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">CNN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">CNN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
@@ -658,7 +683,7 @@ Test accuracy: 97.660%
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">trainable_cnn</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">trainable_cnn</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
     <span class="n">time_start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
     <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cuda:0&#39;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
 
@@ -698,14 +723,14 @@ Test accuracy: 97.660%
 <tr><td>trainable_cnn_5da4c_00001</td><td>TERMINATED</td><td>     </td><td style="text-align: right;">0.03</td><td style="text-align: right;">0.0657198</td><td style="text-align: right;">     5</td><td style="text-align: right;">         198.405</td></tr>
 <tr><td>trainable_cnn_5da4c_00002</td><td>TERMINATED</td><td>     </td><td style="text-align: right;">0.1 </td><td style="text-align: right;">0.0405428</td><td style="text-align: right;">     5</td><td style="text-align: right;">         196.356</td></tr>
 </tbody>
-</table><br><br></div><div class="output text_plain highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;ray.tune.analysis.experiment_analysis.ExperimentAnalysis at 0x199521ca808&gt;
+</table><br><br></div><div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;ray.tune.analysis.experiment_analysis.ExperimentAnalysis at 0x199521ca808&gt;
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">=</span><span class="n">CNN</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">=</span><span class="n">CNN</span><span class="p">()</span>
 <span class="n">criterion</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">()</span>
 <span class="n">optimizer</span><span class="o">=</span><span class="n">optim</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 <span class="n">num_epochs</span><span class="o">=</span><span class="mi">10</span>
@@ -715,7 +740,7 @@ Test accuracy: 97.660%
 </div>
 <div class="cell_output docutils container">
 <img alt="../_images/mnist_pytorch_28_0.png" src="../_images/mnist_pytorch_28_0.png" />
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>accuracy
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>accuracy
 	training         	 (min:    0.837, max:    0.994, cur:    0.994)
 	validation       	 (min:    0.863, max:    0.988, cur:    0.987)
 log loss
@@ -730,7 +755,7 @@ Test accuracy: 99.020%
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">confusion_matrix</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="s1">&#39;CNN&#39;</span><span class="p">,</span><span class="n">reshape</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">confusion_matrix</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="s1">&#39;CNN&#39;</span><span class="p">,</span><span class="n">reshape</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

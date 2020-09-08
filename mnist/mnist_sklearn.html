@@ -2,9 +2,10 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MNIST with Scikit-Learn &#8212; Jason Liu</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
     <link href="../_static/css/index.css" rel="stylesheet">
@@ -14,7 +15,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-dropdown.css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/sphinx-book-theme.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -24,12 +25,10 @@
     <script src="../_static/togglebutton.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
-    <script src="../_static/mystnb.js"></script>
     <script src="../_static/sphinx-book-theme.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -129,6 +128,10 @@
 
  <!-- To handle the deprecated key -->
 
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
 </div>
 
 
@@ -197,6 +200,28 @@
                     class="fas fa-expand"></i></button></a>
 
         <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/jasoneliu/pessoalab2020/master?urlpath=tree/mnist/mnist_sklearn.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        <a class="colab-button" href="https://colab.research.google.com/github/jasoneliu/pessoalab2020/blob/master/mnist/mnist_sklearn.ipynb"><button type="button" class="btn btn-secondary topbarbtn"
+                title="Launch Colab" data-toggle="tooltip" data-placement="left"><img class="colab-button-logo"
+                    src="../_static/images/logo_colab.png"
+                    alt="Interact on Colab">Colab</button></a>
+        
+        
+    </div>
+</div>
 
     </div>
 
@@ -333,7 +358,7 @@ Each dataset is then split into sets:</p>
 <p>Begin with some imports:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">fetch_openml</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">fetch_openml</span>
 <span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
 <span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVC</span>
 <span class="kn">from</span> <span class="nn">sklearn.naive_bayes</span> <span class="kn">import</span> <span class="n">GaussianNB</span><span class="p">,</span> <span class="n">MultinomialNB</span>
@@ -353,7 +378,7 @@ Each dataset is then split into sets:</p>
 <p>The full MNIST dataset needs to normalized with feature scaling then split into training and validation sets. We can also show some examples of the handwritten digits in the dataset:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">fetch_openml</span><span class="p">(</span><span class="s1">&#39;mnist_784&#39;</span><span class="p">,</span> <span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">fetch_openml</span><span class="p">(</span><span class="s1">&#39;mnist_784&#39;</span><span class="p">,</span> <span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">/</span><span class="mf">255.0</span>
 
 <span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -385,7 +410,7 @@ Each dataset is then split into sets:</p>
 <p>We start by finding the best hyperparameters (primarily learning rate) for our logistic regression model. This can be done using a grid search, which uses a given list of hyperparameters to find the one that yields the highest accuracy or lowest loss:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">grid</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">grid</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
     <span class="n">time_start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
     <span class="n">grid_search</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">error_score</span><span class="o">=</span><span class="s1">&#39;raise&#39;</span><span class="p">,</span>
         <span class="n">estimator</span> <span class="o">=</span> <span class="n">clf</span><span class="p">,</span>
@@ -405,7 +430,7 @@ Each dataset is then split into sets:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Tuning time: 59.016s
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Tuning time: 59.016s
 Best parameters: {&#39;C&#39;: 0.33, &#39;max_iter&#39;: 50, &#39;multi_class&#39;: &#39;ovr&#39;, &#39;penalty&#39;: &#39;l2&#39;, &#39;solver&#39;: &#39;lbfgs&#39;, &#39;tol&#39;: 0.001}
 </pre></div>
 </div>
@@ -414,7 +439,7 @@ Best parameters: {&#39;C&#39;: 0.33, &#39;max_iter&#39;: 50, &#39;multi_class&#3
 <p>Now we let our model train on a training set, then we can test its accuracy on a validation set:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="n">clf</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="n">clf</span><span class="p">):</span>
     <span class="n">time_start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
     <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Large dataset:&#39;</span><span class="p">)</span>
@@ -437,7 +462,7 @@ Best parameters: {&#39;C&#39;: 0.33, &#39;max_iter&#39;: 50, &#39;multi_class&#3
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Large dataset:
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Large dataset:
 • Training time:	   18.075s
 • Training set accuracy:   92.627%
 • Validation set accuracy: 91.238%
@@ -453,7 +478,7 @@ Small dataset:
 <p>To watch for overfitting, we plot the accuracy of both training and validation sets as a function of the number of training epochs. The goal of minimal overfitting should yield similar accuracy for both sets, as shown by the large dataset:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">validation_curves</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">y_low</span><span class="p">,</span> <span class="n">y_high</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">validation_curves</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">y_low</span><span class="p">,</span> <span class="n">y_high</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
     <span class="n">train_scores</span><span class="p">,</span> <span class="n">test_scores</span> <span class="o">=</span> <span class="n">validation_curve</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">param_name</span><span class="o">=</span><span class="s1">&#39;max_iter&#39;</span><span class="p">,</span> <span class="n">param_range</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;accuracy&#39;</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
     <span class="n">train_scores_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">train_scores</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">test_scores_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">test_scores</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -493,14 +518,14 @@ Small dataset:
 <h3>Linear Kernel<a class="headerlink" href="#linear-kernel" title="Permalink to this headline">¶</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">svm_lin</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="s1">&#39;scale&#39;</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">decision_function_shape</span><span class="o">=</span><span class="s1">&#39;ovr&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">svm_lin</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="s1">&#39;scale&#39;</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">decision_function_shape</span><span class="o">=</span><span class="s1">&#39;ovr&#39;</span><span class="p">)</span>
 <span class="n">train</span><span class="p">(</span><span class="n">svm_lin</span><span class="p">)</span>
 <span class="n">train_small</span><span class="p">(</span><span class="n">svm_lin</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Large dataset:
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Large dataset:
 • Training time:	   70.645s
 • Training set accuracy:   71.510%
 • Validation set accuracy: 70.662%
@@ -518,14 +543,14 @@ Small dataset:
 <h3>Polynomial Kernel<a class="headerlink" href="#polynomial-kernel" title="Permalink to this headline">¶</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">clf</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;poly&#39;</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">decision_function_shape</span><span class="o">=</span><span class="s1">&#39;ovr&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clf</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;poly&#39;</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">decision_function_shape</span><span class="o">=</span><span class="s1">&#39;ovr&#39;</span><span class="p">)</span>
 <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;C&#39;</span><span class="p">:[</span><span class="mf">3.33</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">33.33</span><span class="p">],</span> <span class="s1">&#39;gamma&#39;</span><span class="p">:[</span><span class="s1">&#39;scale&#39;</span><span class="p">],</span> <span class="s1">&#39;kernel&#39;</span><span class="p">:[</span><span class="s1">&#39;rbf&#39;</span><span class="p">],</span> <span class="s1">&#39;tol&#39;</span><span class="p">:[</span><span class="mf">0.001</span><span class="p">],</span> <span class="s1">&#39;max_iter&#39;</span><span class="p">:[</span><span class="mi">50</span><span class="p">],</span> <span class="s1">&#39;decision_function_shape&#39;</span><span class="p">:[</span><span class="s1">&#39;ovr&#39;</span><span class="p">]}</span>
 <span class="n">grid</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Tuning time: 873.508s
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Tuning time: 873.508s
 Best parameters: {&#39;C&#39;: 3.33, &#39;decision_function_shape&#39;: &#39;ovr&#39;, &#39;gamma&#39;: &#39;scale&#39;, &#39;kernel&#39;: &#39;rbf&#39;, &#39;max_iter&#39;: 50, &#39;tol&#39;: 0.001}
 </pre></div>
 </div>
@@ -533,14 +558,14 @@ Best parameters: {&#39;C&#39;: 3.33, &#39;decision_function_shape&#39;: &#39;ovr
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">svm_poly</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;poly&#39;</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="s1">&#39;scale&#39;</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">decision_function_shape</span><span class="o">=</span><span class="s1">&#39;ovr&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">svm_poly</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;poly&#39;</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="s1">&#39;scale&#39;</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">decision_function_shape</span><span class="o">=</span><span class="s1">&#39;ovr&#39;</span><span class="p">)</span>
 <span class="n">train</span><span class="p">(</span><span class="n">svm_poly</span><span class="p">)</span>
 <span class="n">train_small</span><span class="p">(</span><span class="n">svm_poly</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Large dataset:
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Large dataset:
 • Training time:	   72.120s
 • Training set accuracy:   83.833%
 • Validation set accuracy: 83.129%
@@ -558,14 +583,14 @@ Small dataset:
 <h3>RBF Kernel<a class="headerlink" href="#rbf-kernel" title="Permalink to this headline">¶</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">clf</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;rbf&#39;</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">decision_function_shape</span><span class="o">=</span><span class="s1">&#39;ovr&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clf</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;rbf&#39;</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">decision_function_shape</span><span class="o">=</span><span class="s1">&#39;ovr&#39;</span><span class="p">)</span>
 <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;C&#39;</span><span class="p">:[</span><span class="mf">3.33</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">33.33</span><span class="p">],</span> <span class="s1">&#39;gamma&#39;</span><span class="p">:[</span><span class="s1">&#39;scale&#39;</span><span class="p">],</span> <span class="s1">&#39;kernel&#39;</span><span class="p">:[</span><span class="s1">&#39;rbf&#39;</span><span class="p">],</span> <span class="s1">&#39;tol&#39;</span><span class="p">:[</span><span class="mf">0.001</span><span class="p">],</span> <span class="s1">&#39;max_iter&#39;</span><span class="p">:[</span><span class="mi">50</span><span class="p">],</span> <span class="s1">&#39;decision_function_shape&#39;</span><span class="p">:[</span><span class="s1">&#39;ovr&#39;</span><span class="p">]}</span>
 <span class="n">grid</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Tuning time: 868.069s
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Tuning time: 868.069s
 Best parameters: {&#39;C&#39;: 3.33, &#39;decision_function_shape&#39;: &#39;ovr&#39;, &#39;gamma&#39;: &#39;scale&#39;, &#39;kernel&#39;: &#39;rbf&#39;, &#39;max_iter&#39;: 50, &#39;tol&#39;: 0.001}
 </pre></div>
 </div>
@@ -573,14 +598,14 @@ Best parameters: {&#39;C&#39;: 3.33, &#39;decision_function_shape&#39;: &#39;ovr
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">svm_rbf</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;rbf&#39;</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="s1">&#39;scale&#39;</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">decision_function_shape</span><span class="o">=</span><span class="s1">&#39;ovr&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">svm_rbf</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;rbf&#39;</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="s1">&#39;scale&#39;</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">decision_function_shape</span><span class="o">=</span><span class="s1">&#39;ovr&#39;</span><span class="p">)</span>
 <span class="n">train</span><span class="p">(</span><span class="n">svm_rbf</span><span class="p">)</span>
 <span class="n">train_small</span><span class="p">(</span><span class="n">svm_rbf</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Large dataset:
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Large dataset:
 • Training time:	   77.170s
 • Training set accuracy:   92.659%
 • Validation set accuracy: 91.238%
@@ -595,7 +620,7 @@ Small dataset:
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">35</span><span class="p">,</span><span class="mi">40</span><span class="p">,</span><span class="mi">45</span><span class="p">,</span><span class="mi">50</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">35</span><span class="p">,</span><span class="mi">40</span><span class="p">,</span><span class="mi">45</span><span class="p">,</span><span class="mi">50</span><span class="p">]</span>
 <span class="n">svm_rbf</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;rbf&#39;</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="s1">&#39;scale&#39;</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">decision_function_shape</span><span class="o">=</span><span class="s1">&#39;ovr&#39;</span><span class="p">)</span>
 <span class="n">validation_curves</span><span class="p">(</span><span class="n">svm_rbf</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">1.05</span><span class="p">,</span> <span class="s1">&#39;SVM with RBF Kernel&#39;</span><span class="p">)</span>
 </pre></div>
@@ -617,14 +642,14 @@ Small dataset:
 <p>The Gaussian Naive Bayes classifier models continuous-valued features. The MNIST data is technically discrete, but is only forced to be so due to limitations of image representation. In practice, values are essentially continuous.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nb_gaus</span> <span class="o">=</span> <span class="n">GaussianNB</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nb_gaus</span> <span class="o">=</span> <span class="n">GaussianNB</span><span class="p">()</span>
 <span class="n">train</span><span class="p">(</span><span class="n">nb_gaus</span><span class="p">)</span>
 <span class="n">train_small</span><span class="p">(</span><span class="n">nb_gaus</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Large dataset:
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Large dataset:
 • Training time:	   1.220s
 • Training set accuracy:   53.953%
 • Validation set accuracy: 54.105%
@@ -643,14 +668,14 @@ Small dataset:
 <p>The Multinomial Naive Bayes classifier models discrete-valued features.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nb_mult</span> <span class="o">=</span> <span class="n">MultinomialNB</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nb_mult</span> <span class="o">=</span> <span class="n">MultinomialNB</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">train</span><span class="p">(</span><span class="n">nb_mult</span><span class="p">)</span>
 <span class="n">train_small</span><span class="p">(</span><span class="n">nb_mult</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Large dataset:
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Large dataset:
 • Training time:	   0.364s
 • Training set accuracy:   82.894%
 • Validation set accuracy: 82.186%
@@ -684,14 +709,14 @@ Small dataset:
 <p>Random forest classifiers use multiple decision trees that are relatively uncorrelated, hence creating an ensemble. Each decision tree gives a prediction and the random forest picks the majority vote. Low correlation allows for trees to protect each other from invidual error. This is accomplished by providing each decision tree with a random subset of features rather than all features.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">()</span>
 <span class="n">train</span><span class="p">(</span><span class="n">rf</span><span class="p">)</span>
 <span class="n">train_small</span><span class="p">(</span><span class="n">rf</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Large dataset:
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Large dataset:
 • Training time:	   50.922s
 • Training set accuracy:   100.000%
 • Validation set accuracy: 96.681%
@@ -711,14 +736,14 @@ Small dataset:
 <p>It differs because decision trees are added one at a time, minimizing a cost function in the process.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gb</span> <span class="o">=</span> <span class="n">GradientBoostingClassifier</span><span class="p">(</span><span class="n">max_features</span><span class="o">=</span><span class="s1">&#39;sqrt&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gb</span> <span class="o">=</span> <span class="n">GradientBoostingClassifier</span><span class="p">(</span><span class="n">max_features</span><span class="o">=</span><span class="s1">&#39;sqrt&#39;</span><span class="p">)</span>
 <span class="n">train</span><span class="p">(</span><span class="n">gb</span><span class="p">)</span>
 <span class="n">train_small</span><span class="p">(</span><span class="n">gb</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Large dataset:
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Large dataset:
 • Training time:	   192.125s
 • Training set accuracy:   95.133%
 • Validation set accuracy: 93.595%
@@ -742,7 +767,7 @@ Small dataset:
 <p>A MLP is a neural networks that is organized as an input layer, hidden layers, and an output layer, with each node being connected to all nodes in the next layer. It does not have any other complex structure that other neural networks may have.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Loss Curve for MLP&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Loss Curve for MLP&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Epochs&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Loss&#39;</span><span class="p">)</span>
 <span class="n">mlp</span> <span class="o">=</span> <span class="n">MLPClassifier</span><span class="p">(</span><span class="n">solver</span><span class="o">=</span><span class="s1">&#39;adam&#39;</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;logistic&#39;</span><span class="p">)</span>
@@ -759,7 +784,7 @@ Small dataset:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Large dataset:
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Large dataset:
 • Training time:	   172.790s
 • Training set accuracy:   100.000%
 • Validation set accuracy: 97.476%
