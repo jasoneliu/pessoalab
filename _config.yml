@@ -17,6 +17,7 @@ html:
   use_repository_button: true
   use_issues_button: true
   use_edit_page_button: true
+  extra_navbar: ""
 
 #######################################################################################
 # Launch button settings
@@ -24,5 +25,10 @@ repository:
   url: https://github.com/jasoneliu/pessoalab2020
 latex:
   latex_engine: "xelatex"
-  latex_documents:
-    targetname: book.tex
+  
+#######################################################################################
+# Advanced and power-user settings
+sphinx:
+  config:
+    html_js_files:
+    - https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js
