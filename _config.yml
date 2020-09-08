@@ -9,6 +9,11 @@ logo: "logo.png"
 # Execution settings
 execute:
   execute_notebooks: off
+  
+#######################################################################################
+# Parse and render settings
+parse:
+  myst_extended_syntax: true
 
 #######################################################################################
 # HTML-specific settings
