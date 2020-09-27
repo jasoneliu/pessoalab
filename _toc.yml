@@ -13,4 +13,5 @@
 - part: Movie-Watching Trajectories
   chapters:
   - file: movie_trajectories/trajectories
-  - file: movie_trajectories/classification
+  - file: movie_trajectories/classification_bsplinecoeff
+  - file: movie_trajectories/classification_3dtraj
